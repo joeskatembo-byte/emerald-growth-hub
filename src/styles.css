@@ -26,6 +26,12 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -63,25 +69,29 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  /* Church design system — bg #f1f4f6, text #1e293b, brand emerald #0f5a3e */
+  --background: oklch(0.965 0.005 240);
+  --foreground: oklch(0.28 0.03 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.28 0.03 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.28 0.03 250);
+  --primary: oklch(0.42 0.09 158);
+  --primary-foreground: oklch(0.985 0.005 160);
+  --secondary: oklch(0.955 0.008 240);
+  --secondary-foreground: oklch(0.28 0.03 250);
+  --muted: oklch(0.945 0.008 240);
+  --muted-foreground: oklch(0.5 0.02 250);
+  --accent: oklch(0.94 0.02 158);
+  --accent-foreground: oklch(0.32 0.08 158);
+  --brand: oklch(0.42 0.09 158);
+  --brand-foreground: oklch(0.985 0.005 160);
+  --brand-soft: oklch(0.94 0.03 158);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.9 0.01 240);
+  --input: oklch(0.9 0.01 240);
+  --ring: oklch(0.42 0.09 158);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +150,80 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+@utility font-numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility glass-card {
+  background: color-mix(in oklab, white 78%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in oklab, white 60%, transparent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 10px 30px -18px rgba(15, 23, 42, 0.18);
+}
+
+@utility glass-dark {
+  background: linear-gradient(135deg, oklch(0.28 0.05 158), oklch(0.2 0.03 250));
+  color: white;
+}
+
+@utility shadow-soft {
+  box-shadow: 0 20px 45px -25px rgba(15, 90, 62, 0.35), 0 2px 8px -3px rgba(15, 23, 42, 0.08);
+}
+
+@utility bg-brand-gradient {
+  background-image: linear-gradient(135deg, oklch(0.42 0.09 158), oklch(0.55 0.13 165));
+}
+
+/* Story-style progress bar */
+@keyframes story-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.story-bar-fill {
+  transform-origin: left center;
+  animation: story-progress linear forwards;
+}
+
+/* Horizontal accordion */
+.h-accordion-panel {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms;
+  opacity: 0;
+}
+.h-accordion-panel > div { overflow: hidden; }
+.h-accordion-panel[data-open="true"] {
+  grid-template-columns: 1fr;
+  opacity: 1;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-bar-fill, .marquee-track { animation: none !important; }
 }
