@@ -1,24 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/site/Header";
+import { Footer } from "@/components/site/Footer";
+import { HeroBento } from "@/components/home/HeroBento";
+import { NewsStories } from "@/components/home/NewsStories";
+import { CallCards } from "@/components/home/CallCards";
+import { TestimonialsStack } from "@/components/home/TestimonialsStack";
+import { MediaLibrary } from "@/components/home/MediaLibrary";
+import { HorizontalAccordion } from "@/components/home/HorizontalAccordion";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Église Emmanuel — Une famille de foi à Kinshasa" },
+      { name: "description", content: "Accueillir, restaurer, envoyer. Cultes, séminaires, intercession et actualités de l'Église Emmanuel en RDC." },
+      { property: "og:title", content: "Église Emmanuel — Une famille de foi à Kinshasa" },
+      { property: "og:description", content: "Rejoignez une communauté vivante : cultes, prières, action de grâce, médiathèque." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen">
+      <Header />
+      <main>
+        <HeroBento />
+        <NewsStories />
+        <CallCards />
+        <TestimonialsStack />
+        <MediaLibrary />
+        <HorizontalAccordion />
+      </main>
+      <Footer />
     </div>
   );
 }
