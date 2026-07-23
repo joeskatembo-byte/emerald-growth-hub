@@ -85,35 +85,23 @@ export type Media = {
   type: "Affiche" | "Podcast" | "Vidéo" | "Photo";
   date: string;
   hue: string;
+  category: "evenements" | "quotidien";
 };
 
-export const media: Record<string, Media[]> = {
-  Affiches: [
-    { id: "a1", title: "Convention 2026", type: "Affiche", date: "01 avr.", hue: "from-emerald-700 to-emerald-900" },
-    { id: "a2", title: "Nuit de louange", type: "Affiche", date: "12 mars", hue: "from-indigo-700 to-slate-900" },
-    { id: "a3", title: "Camp jeunesse", type: "Affiche", date: "22 mars", hue: "from-amber-500 to-rose-700" },
-    { id: "a4", title: "Retraite pastorale", type: "Affiche", date: "05 avr.", hue: "from-teal-600 to-emerald-900" },
-    { id: "a5", title: "Séminaire couples", type: "Affiche", date: "18 avr.", hue: "from-rose-500 to-purple-800" },
-  ],
-  Podcasts: [
-    { id: "p1", title: "Marcher par la foi", type: "Podcast", date: "10 mars", hue: "from-slate-700 to-slate-900" },
-    { id: "p2", title: "La prière qui déplace", type: "Podcast", date: "03 mars", hue: "from-emerald-600 to-teal-900" },
-    { id: "p3", title: "L'école du Saint-Esprit", type: "Podcast", date: "25 fév.", hue: "from-indigo-600 to-blue-900" },
-    { id: "p4", title: "Bâtir sa maison", type: "Podcast", date: "18 fév.", hue: "from-amber-600 to-orange-900" },
-  ],
-  Vidéos: [
-    { id: "v1", title: "Résumé — Culte du dimanche", type: "Vidéo", date: "10 mars", hue: "from-emerald-600 to-emerald-900" },
-    { id: "v2", title: "Témoignage — Chantal", type: "Vidéo", date: "07 mars", hue: "from-rose-600 to-pink-900" },
-    { id: "v3", title: "Sortie évangélisation", type: "Vidéo", date: "02 mars", hue: "from-teal-600 to-cyan-900" },
-    { id: "v4", title: "Louange en direct", type: "Vidéo", date: "24 fév.", hue: "from-violet-600 to-purple-900" },
-  ],
-  Photos: [
-    { id: "ph1", title: "Baptêmes 2026", type: "Photo", date: "01 mars", hue: "from-sky-500 to-blue-800" },
-    { id: "ph2", title: "Sortie ministérielle", type: "Photo", date: "15 fév.", hue: "from-emerald-500 to-teal-800" },
-    { id: "ph3", title: "Fête des mères", type: "Photo", date: "10 fév.", hue: "from-pink-500 to-rose-800" },
-    { id: "ph4", title: "Réunion des anciens", type: "Photo", date: "02 fév.", hue: "from-slate-500 to-slate-800" },
-  ],
-};
+export const media: Media[] = [
+  { id: "e1", title: "Mariage Jean & Grâce", type: "Photo", date: "22 mars", hue: "from-rose-500 to-pink-800", category: "evenements" },
+  { id: "e2", title: "Anniversaire Maman Esther", type: "Photo", date: "18 mars", hue: "from-amber-500 to-orange-700", category: "evenements" },
+  { id: "e3", title: "Conférence 'Bâtir'", type: "Affiche", date: "10 mars", hue: "from-indigo-700 to-slate-900", category: "evenements" },
+  { id: "e4", title: "Chantier temple — étape 3", type: "Photo", date: "02 mars", hue: "from-teal-600 to-emerald-900", category: "evenements" },
+  { id: "e5", title: "Convention 2026", type: "Affiche", date: "01 avr.", hue: "from-emerald-700 to-emerald-900", category: "evenements" },
+  { id: "e6", title: "Baptêmes 2026", type: "Photo", date: "01 mars", hue: "from-sky-500 to-blue-800", category: "evenements" },
+  { id: "q1", title: "Culte du dimanche", type: "Vidéo", date: "10 mars", hue: "from-emerald-600 to-emerald-900", category: "quotidien" },
+  { id: "q2", title: "Séminaire des jeunes", type: "Affiche", date: "22 mars", hue: "from-amber-500 to-rose-700", category: "quotidien" },
+  { id: "q3", title: "Podcast — Marcher par la foi", type: "Podcast", date: "10 mars", hue: "from-slate-700 to-slate-900", category: "quotidien" },
+  { id: "q4", title: "Louange en direct", type: "Vidéo", date: "24 fév.", hue: "from-violet-600 to-purple-900", category: "quotidien" },
+  { id: "q5", title: "École du Saint-Esprit", type: "Podcast", date: "25 fév.", hue: "from-indigo-600 to-blue-900", category: "quotidien" },
+  { id: "q6", title: "Réunion des anciens", type: "Photo", date: "02 fév.", hue: "from-slate-500 to-slate-800", category: "quotidien" },
+];
 
 export const faq = [
   { q: "Quels sont les horaires des cultes ?", a: "Dimanche 09h00 (culte principal), mercredi 18h00 (enseignement), vendredi 19h00 (adoration & délivrance)." },
