@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Home,
   Info,
@@ -13,6 +13,7 @@ import {
   History,
   Users,
   CalendarDays,
+  Sparkles,
   HeartHandshake,
   CalendarClock,
   Church,
@@ -25,7 +26,7 @@ const items: {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   to?: string;
-  submenu?: { label: string; desc: string; to: string; icon: React.ComponentType<{ className?: string }> }[];
+  submenu?: { label: string; desc: string; to: string; hash?: string; icon: React.ComponentType<{ className?: string }> }[];
 }[] = [
   { key: "accueil", label: "Accueil", icon: Home, to: "/" },
   {
@@ -33,9 +34,10 @@ const items: {
     label: "À propos",
     icon: Info,
     submenu: [
-      { label: "Historique", desc: "Notre parcours, notre vision", to: "/a-propos", icon: History },
-      { label: "Départements", desc: "Ministères et équipes", to: "/a-propos", icon: Users },
-      { label: "Programmes", desc: "Cultes, séminaires, retraites", to: "/a-propos", icon: CalendarDays },
+      { label: "Histoire", desc: "Frise, vision & mission", to: "/a-propos", hash: "histoire", icon: History },
+      { label: "Leadership", desc: "Fondateurs & conseil", to: "/a-propos", hash: "leadership", icon: Sparkles },
+      { label: "Départements", desc: "Ministères et équipes", to: "/a-propos", hash: "departements", icon: Users },
+      { label: "Programmes", desc: "Cultes, séminaires, retraites", to: "/a-propos", hash: "programmes", icon: CalendarDays },
     ],
   },
   { key: "don", label: "Don", icon: HandHeart, to: "/don" },
@@ -57,6 +59,15 @@ export function Header() {
   const [drawer, setDrawer] = useState(false);
   const [drawerStep, setDrawerStep] = useState<NavKey | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const routeToKey: Record<string, NavKey> = {
+    "/": "accueil",
+    "/a-propos": "apropos",
+    "/don": "don",
+    "/contact": "contact",
+    "/inscription": "inscription",
+  };
+  const activeKey = routeToKey[pathname];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 220);
@@ -94,15 +105,17 @@ export function Header() {
               const btnCls =
                 "group relative flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-foreground/80 hover:bg-brand-soft hover:text-brand transition";
               if (it.submenu) {
+                const isCurrent = activeKey === it.key;
                 return (
                   <button
                     key={it.key}
                     onClick={() => setOpenMenu(active ? null : it.key)}
                     aria-expanded={active}
-                    className={btnCls + (active ? " bg-brand-soft text-brand" : "")}
+                    className={btnCls + ((active || isCurrent) ? " bg-brand-soft text-brand" : "")}
                   >
                     <Icon className="h-4 w-4" />
                     <span className="hidden lg:inline">{it.label}</span>
+                    {isCurrent && <span className="ml-1 h-1.5 w-1.5 rounded-full bg-brand" />}
                   </button>
                 );
               }
@@ -144,6 +157,7 @@ export function Header() {
                   <Link
                     key={s.label}
                     to={s.to}
+                    hash={s.hash}
                     onClick={() => setOpenMenu(null)}
                     className="group flex items-start gap-3 rounded-2xl p-3 transition hover:bg-brand-soft"
                   >
@@ -238,7 +252,7 @@ export function Header() {
                 {items.find((i) => i.key === drawerStep)?.submenu?.map((s) => {
                   const SIcon = s.icon;
                   return (
-                    <Link key={s.label} to={s.to} onClick={() => setDrawer(false)} className="glass-card flex items-center gap-3 rounded-2xl p-3">
+                    <Link key={s.label} to={s.to} hash={s.hash} onClick={() => setDrawer(false)} className="glass-card flex items-center gap-3 rounded-2xl p-3">
                       <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white">
                         <SIcon className="h-5 w-5" />
                       </div>
