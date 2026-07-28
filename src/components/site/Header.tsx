@@ -46,9 +46,9 @@ const items: {
     label: "Contact",
     icon: MessageCircle,
     submenu: [
-      { label: "Intercession", desc: "Confier un sujet de prière", to: "/contact", icon: HeartHandshake },
-      { label: "Rendez-vous pasteur", desc: "Rencontre confidentielle", to: "/contact", icon: CalendarClock },
-      { label: "Contacter l'église", desc: "Toute autre demande", to: "/contact", icon: Church },
+      { label: "Intercession", desc: "Confier un sujet de prière", to: "/contact", hash: "intercession", icon: HeartHandshake },
+      { label: "Rendez-vous pasteur", desc: "Rencontre confidentielle", to: "/contact", hash: "rendez-vous", icon: CalendarClock },
+      { label: "Contacter l'église", desc: "Toute autre demande", to: "/contact", hash: "message", icon: Church },
     ],
   },
   { key: "inscription", label: "Inscription", icon: UserPlus, to: "/inscription" },
