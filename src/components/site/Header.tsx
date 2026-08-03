@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Home,
@@ -60,6 +60,18 @@ export function Header() {
   const [drawerStep, setDrawerStep] = useState<NavKey | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelClose = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }, []);
+  const openNow = useCallback((k: NavKey | null) => {
+    cancelClose();
+    setOpenMenu(k);
+  }, [cancelClose]);
+  const closeSoon = useCallback(() => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 220);
+  }, [cancelClose]);
   const routeToKey: Record<string, NavKey> = {
     "/": "accueil",
     "/a-propos": "apropos",
@@ -100,7 +112,8 @@ export function Header() {
           {/* Desktop icon nav */}
           <nav
             className="hidden items-center gap-1 md:flex"
-            onMouseLeave={() => setOpenMenu(null)}
+            onMouseLeave={closeSoon}
+            onMouseEnter={cancelClose}
           >
             {items.map((it) => {
               const Icon = it.icon;
@@ -113,8 +126,8 @@ export function Header() {
                   <button
                     key={it.key}
                     onClick={() => setOpenMenu(active ? null : it.key)}
-                    onMouseEnter={() => setOpenMenu(it.key)}
-                    onFocus={() => setOpenMenu(it.key)}
+                    onMouseEnter={() => openNow(it.key)}
+                    onFocus={() => openNow(it.key)}
                     aria-expanded={active}
                     className={btnCls + ((active || isCurrent) ? " bg-brand-soft text-brand" : "")}
                   >
@@ -129,7 +142,7 @@ export function Header() {
                   key={it.key}
                   to={it.to!}
                   onClick={() => setOpenMenu(null)}
-                  onMouseEnter={() => setOpenMenu(null)}
+                  onMouseEnter={() => openNow(null)}
                   className={btnCls}
                   activeProps={{ className: "bg-brand-soft text-brand" }}
                 >
@@ -154,8 +167,8 @@ export function Header() {
         {openMenu && (
           <div
             className="animate-fade-in mx-auto hidden w-[min(1000px,95%)] pt-2 md:block"
-            onMouseEnter={() => setOpenMenu(openMenu)}
-            onMouseLeave={() => setOpenMenu(null)}
+            onMouseEnter={cancelClose}
+            onMouseLeave={closeSoon}
           >
             <div className="glass-card grid gap-3 rounded-3xl p-4 shadow-soft sm:grid-cols-3">
               {items.find((i) => i.key === openMenu)?.submenu?.map((s) => {

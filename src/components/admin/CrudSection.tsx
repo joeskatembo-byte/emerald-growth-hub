@@ -56,10 +56,10 @@ export function CrudSection<T extends Row>({
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher…" className={field + " w-44 pl-9"} />
           </div>
-          <button onClick={reset} title="Réinitialiser" className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-muted-foreground transition hover:text-brand">
+          <button onClick={reset} title="Réinitialiser" className="hover-lift grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-muted-foreground hover:text-brand">
             <RotateCcw className="h-4 w-4" />
           </button>
-          <button onClick={startNew} className="flex items-center gap-1.5 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:opacity-95">
+          <button onClick={startNew} className="hover-lift flex items-center gap-1.5 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-soft">
             <Plus className="h-4 w-4" /> Ajouter
           </button>
         </div>
@@ -117,7 +117,7 @@ export function CrudSection<T extends Row>({
           </thead>
           <tbody>
             {filtered.map((r) => (
-              <tr key={r.id} className="bg-card transition hover:bg-brand-soft/40">
+              <tr key={r.id} className="bg-card transition duration-300 hover:bg-brand-soft/60">
                 {columns.map((c, i) => (
                   <td
                     key={c.key}
