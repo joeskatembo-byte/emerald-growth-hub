@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -150,10 +151,15 @@ export function SignupWizard() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className="text-sm font-medium">Commune</label>
-              <select className={field + " mt-1"} value={f.commune} onChange={(e) => set("commune", e.target.value)}>
-                <option value="">Sélectionnez votre commune…</option>
-                {communes.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
+              <FancySelect
+                className="mt-1"
+                searchable
+                ariaLabel="Commune"
+                placeholder="Sélectionnez votre commune…"
+                value={f.commune}
+                onChange={(v) => set("commune", v)}
+                options={communes}
+              />
             </div>
             <div>
               <label className="text-sm font-medium">Avenue</label>
@@ -223,10 +229,14 @@ export function SignupWizard() {
             </div>
             <div>
               <label className="text-sm font-medium">Département</label>
-              <select className={field + " mt-1"} value={f.departement} onChange={(e) => set("departement", e.target.value)}>
-                <option value="">Choisissez un département…</option>
-                {departmentNames.map((d) => <option key={d} value={d}>{d}</option>)}
-              </select>
+              <FancySelect
+                className="mt-1"
+                ariaLabel="Département"
+                placeholder="Choisissez un département…"
+                value={f.departement}
+                onChange={(v) => set("departement", v)}
+                options={departmentNames}
+              />
             </div>
             <div className="sm:col-span-2">
               <label className="text-sm font-medium">Mot de passe</label>

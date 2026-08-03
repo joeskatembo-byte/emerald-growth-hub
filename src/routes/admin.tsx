@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck } from "lucide-react";
@@ -132,24 +133,28 @@ function Page() {
                         <td className="px-3 py-3">{m.commune}</td>
                         <td className="hidden px-3 py-3 font-mono text-xs md:table-cell">{m.telephone}</td>
                         <td className="px-3 py-3">
-                          <select
-                            className="rounded-xl border border-border bg-card px-2 py-1.5 text-xs outline-none focus:border-brand"
+                          <FancySelect
+                            size="sm"
+                            className="min-w-[8rem]"
+                            ariaLabel="Département"
                             value={m.departement}
-                            onChange={(e) => updateMember(m.id, { departement: e.target.value })}
-                          >
-                            {["Aucun", ...departmentNames].map((d) => <option key={d}>{d}</option>)}
-                          </select>
+                            onChange={(v) => updateMember(m.id, { departement: v })}
+                            options={["Aucun", ...departmentNames]}
+                          />
                         </td>
                         <td className="px-3 py-3">
-                          <select
-                            className="rounded-xl border border-border bg-card px-2 py-1.5 text-xs outline-none focus:border-brand"
+                          <FancySelect
+                            size="sm"
+                            className="min-w-[7rem]"
+                            ariaLabel="Rôle"
                             value={m.role}
-                            onChange={(e) => updateMember(m.id, { role: e.target.value as "admin" | "chef" | "membre" })}
-                          >
-                            <option value="membre">Membre</option>
-                            <option value="chef">Chef</option>
-                            <option value="admin">Admin</option>
-                          </select>
+                            onChange={(v) => updateMember(m.id, { role: v as "admin" | "chef" | "membre" })}
+                            options={[
+                              { value: "membre", label: "Membre" },
+                              { value: "chef", label: "Chef" },
+                              { value: "admin", label: "Admin" },
+                            ]}
+                          />
                         </td>
                         <td className="rounded-r-2xl px-3 py-3 text-right">
                           <button

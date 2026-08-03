@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { LogOut, Save, ShieldCheck, UserCog, Users, CalendarClock, Phone, MapPin } from "lucide-react";
@@ -112,15 +113,11 @@ function Page() {
               ))}
               <div>
                 <label className="text-sm font-medium">Commune</label>
-                <select className={field + " mt-1"} value={String(form.commune)} onChange={(e) => set("commune", e.target.value)}>
-                  {communes.map((c) => <option key={c}>{c}</option>)}
-                </select>
+                <FancySelect className="mt-1" searchable ariaLabel="Commune" value={String(form.commune)} onChange={(v) => set("commune", v)} options={communes} />
               </div>
               <div>
                 <label className="text-sm font-medium">État civil</label>
-                <select className={field + " mt-1"} value={String(form.etatCivil)} onChange={(e) => set("etatCivil", e.target.value)}>
-                  {etatsCivils.map((c) => <option key={c}>{c}</option>)}
-                </select>
+                <FancySelect className="mt-1" ariaLabel="État civil" value={String(form.etatCivil)} onChange={(v) => set("etatCivil", v)} options={etatsCivils} />
               </div>
               {form.etatCivil === "Marié(e)" && (
                 <div className="animate-fade-in">
@@ -134,9 +131,7 @@ function Page() {
               </div>
               <div>
                 <label className="text-sm font-medium">Département</label>
-                <select className={field + " mt-1"} value={String(form.departement)} onChange={(e) => set("departement", e.target.value)}>
-                  {departmentNames.map((d) => <option key={d}>{d}</option>)}
-                </select>
+                <FancySelect className="mt-1" ariaLabel="Département" value={String(form.departement)} onChange={(v) => set("departement", v)} options={departmentNames} />
               </div>
             </div>
             <div className="mt-5 flex items-center gap-3">

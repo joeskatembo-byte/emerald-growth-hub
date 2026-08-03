@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search } from "lucide-react";
 import { useCollection, type Row } from "@/lib/collections";
@@ -73,9 +74,14 @@ export function CrudSection<T extends Row>({
                 {c.type === "textarea" ? (
                   <textarea rows={3} maxLength={500} className={field + " mt-1 resize-none"} value={String(draft[c.key] ?? "")} onChange={(e) => setDraft((d) => ({ ...d, [c.key]: e.target.value }))} />
                 ) : c.type === "select" ? (
-                  <select className={field + " mt-1"} value={String(draft[c.key] ?? "")} onChange={(e) => setDraft((d) => ({ ...d, [c.key]: e.target.value }))}>
-                    {(c.options ?? []).map((o) => <option key={o}>{o}</option>)}
-                  </select>
+                  <FancySelect
+                    className="mt-1"
+                    ariaLabel={c.label}
+                    searchable={(c.options ?? []).length > 8}
+                    value={String(draft[c.key] ?? "")}
+                    onChange={(v) => setDraft((d) => ({ ...d, [c.key]: v }))}
+                    options={c.options ?? []}
+                  />
                 ) : (
                   <input
                     type={c.type === "number" ? "number" : c.type === "date" ? "date" : "text"}
