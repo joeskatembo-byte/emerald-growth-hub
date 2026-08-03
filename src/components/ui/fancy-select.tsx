@@ -7,7 +7,7 @@ export type FancyOption = { value: string; label: string };
 type Props = {
   value: string;
   onChange: (value: string) => void;
-  options: (string | FancyOption)[];
+  options: readonly (string | FancyOption)[];
   placeholder?: string;
   className?: string;
   /** Affiche un champ de recherche (utile pour les longues listes, ex. communes). */

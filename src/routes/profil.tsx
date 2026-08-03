@@ -117,7 +117,7 @@ function Page() {
               </div>
               <div>
                 <label className="text-sm font-medium">État civil</label>
-                <FancySelect className="mt-1" ariaLabel="État civil" value={String(form.etatCivil)} onChange={(v) => set("etatCivil", v)} options={[...etatsCivils]} />
+                <FancySelect className="mt-1" ariaLabel="État civil" value={String(form.etatCivil)} onChange={(v) => set("etatCivil", v)} options={etatsCivils} />
               </div>
               {form.etatCivil === "Marié(e)" && (
                 <div className="animate-fade-in">
