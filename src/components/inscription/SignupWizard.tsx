@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {

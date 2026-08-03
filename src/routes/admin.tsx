@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck } from "lucide-react";

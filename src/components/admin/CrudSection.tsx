@@ -1,3 +1,4 @@
+import { FancySelect } from "@/components/ui/fancy-select";
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search } from "lucide-react";
 import { useCollection, type Row } from "@/lib/collections";
