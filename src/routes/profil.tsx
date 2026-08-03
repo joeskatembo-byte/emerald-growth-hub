@@ -96,7 +96,7 @@ function Page() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {/* Informations */}
-          <div className="glass-card rounded-3xl p-6 shadow-soft lg:col-span-2">
+          <div className="hover-lift glass-card rounded-3xl p-6 shadow-soft lg:col-span-2">
             <div className="flex items-center gap-2">
               <UserCog className="h-5 w-5 text-brand" />
               <h2 className="font-display text-lg font-bold">Mes informations personnelles</h2>
@@ -144,7 +144,7 @@ function Page() {
 
           {/* Colonne latérale */}
           <div className="space-y-6">
-            <div className="glass-card rounded-3xl p-6 shadow-soft">
+            <div className="hover-lift glass-card rounded-3xl p-6 shadow-soft">
               <h3 className="font-display text-sm font-semibold uppercase tracking-widest text-muted-foreground">Coordonnées</h3>
               <ul className="mt-3 space-y-2 text-sm">
                 <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-brand" /> {form.commune}, av. {form.avenue} n°{form.parcelle}</li>
@@ -170,7 +170,7 @@ function DeptPanel({ deptName }: { deptName: string }) {
   const [ok, setOk] = useState(false);
 
   return (
-    <div className="glass-card rounded-3xl p-6 shadow-soft">
+    <div className="hover-lift glass-card rounded-3xl p-6 shadow-soft">
       <div className="flex items-center gap-2">
         <Users className="h-5 w-5 text-brand" />
         <h3 className="font-display text-lg font-bold">Gérer le département {d.name}</h3>

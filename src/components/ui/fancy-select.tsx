@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Check, ChevronDown, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,20 +36,53 @@ export function FancySelect({
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const wrap = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top: number; width: number; drop: "down" | "up" } | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /** Ferme après 10 s sans interaction. */
+  const armIdle = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setOpen(false), 10000);
+  }, []);
+
+  const place = useCallback(() => {
+    const el = wrap.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const below = window.innerHeight - r.bottom;
+    const drop: "down" | "up" = below < 240 && r.top > below ? "up" : "down";
+    setPos({
+      left: r.left,
+      width: r.width,
+      top: drop === "down" ? r.bottom + 8 : Math.max(8, r.top - 8),
+      drop,
+    });
+  }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      if (timer.current) clearTimeout(timer.current);
+      return;
+    }
+    place();
+    armIdle();
     const onDoc = (e: MouseEvent) => {
       if (wrap.current && !wrap.current.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onMove = () => place();
     document.addEventListener("mousedown", onDoc);
     window.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", onMove, true);
+    window.addEventListener("resize", onMove);
     return () => {
       document.removeEventListener("mousedown", onDoc);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onMove, true);
+      window.removeEventListener("resize", onMove);
+      if (timer.current) clearTimeout(timer.current);
     };
-  }, [open]);
+  }, [open, place, armIdle]);
 
   const selected = items.find((i) => i.value === value);
   const filtered = q.trim()
@@ -80,10 +114,19 @@ export function FancySelect({
         <ChevronDown className={cn("h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300", open && "rotate-180 text-brand")} />
       </button>
 
-      {open && (
+      {open && pos && typeof document !== "undefined" && createPortal(
         <div
           role="listbox"
-          className="animate-fade-in absolute left-0 right-0 z-50 mt-2 overflow-hidden rounded-3xl border border-border/60 bg-card p-1.5 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.25),0_2px_8px_-3px_rgba(15,23,42,0.08)] backdrop-blur"
+          onMouseMove={armIdle}
+          onKeyDown={armIdle}
+          onMouseDown={(e) => e.stopPropagation()}
+          style={{
+            left: pos.left,
+            width: pos.width,
+            top: pos.drop === "down" ? pos.top : undefined,
+            bottom: pos.drop === "up" ? window.innerHeight - pos.top : undefined,
+          }}
+          className="animate-fade-in fixed z-[2147483647] overflow-hidden rounded-3xl border border-border/60 bg-card p-1.5 shadow-[0_24px_60px_-24px_rgba(15,23,42,0.25),0_2px_8px_-3px_rgba(15,23,42,0.08)]"
         >
           {searchable && (
             <div className="mb-1 flex items-center gap-2 rounded-2xl bg-secondary/70 px-3 py-2">
@@ -126,7 +169,8 @@ export function FancySelect({
               );
             })}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );

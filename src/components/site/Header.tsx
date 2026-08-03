@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Home,
@@ -60,6 +60,18 @@ export function Header() {
   const [drawerStep, setDrawerStep] = useState<NavKey | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelClose = useCallback(() => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }, []);
+  const openNow = useCallback((k: NavKey | null) => {
+    cancelClose();
+    setOpenMenu(k);
+  }, [cancelClose]);
+  const closeSoon = useCallback(() => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpenMenu(null), 220);
+  }, [cancelClose]);
   const routeToKey: Record<string, NavKey> = {
     "/": "accueil",
     "/a-propos": "apropos",
@@ -98,18 +110,24 @@ export function Header() {
           </Link>
 
           {/* Desktop icon nav */}
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav
+            className="hidden items-center gap-1 md:flex"
+            onMouseLeave={closeSoon}
+            onMouseEnter={cancelClose}
+          >
             {items.map((it) => {
               const Icon = it.icon;
               const active = openMenu === it.key;
               const btnCls =
-                "group relative flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-foreground/80 hover:bg-brand-soft hover:text-brand transition";
+                "group relative flex items-center gap-2 rounded-2xl px-3 py-2 text-sm text-foreground/80 transition duration-300 hover:-translate-y-0.5 hover:bg-brand-soft hover:text-brand";
               if (it.submenu) {
                 const isCurrent = activeKey === it.key;
                 return (
                   <button
                     key={it.key}
                     onClick={() => setOpenMenu(active ? null : it.key)}
+                    onMouseEnter={() => openNow(it.key)}
+                    onFocus={() => openNow(it.key)}
                     aria-expanded={active}
                     className={btnCls + ((active || isCurrent) ? " bg-brand-soft text-brand" : "")}
                   >
@@ -124,6 +142,7 @@ export function Header() {
                   key={it.key}
                   to={it.to!}
                   onClick={() => setOpenMenu(null)}
+                  onMouseEnter={() => openNow(null)}
                   className={btnCls}
                   activeProps={{ className: "bg-brand-soft text-brand" }}
                 >
@@ -147,8 +166,9 @@ export function Header() {
         {/* Desktop mega-menu panel */}
         {openMenu && (
           <div
-            className="animate-fade-in mx-auto mt-2 hidden w-[min(1000px,95%)] md:block"
-            onMouseLeave={() => setOpenMenu(null)}
+            className="animate-fade-in mx-auto hidden w-[min(1000px,95%)] pt-2 md:block"
+            onMouseEnter={cancelClose}
+            onMouseLeave={closeSoon}
           >
             <div className="glass-card grid gap-3 rounded-3xl p-4 shadow-soft sm:grid-cols-3">
               {items.find((i) => i.key === openMenu)?.submenu?.map((s) => {
@@ -159,9 +179,9 @@ export function Header() {
                     to={s.to}
                     hash={s.hash}
                     onClick={() => setOpenMenu(null)}
-                    className="group flex items-start gap-3 rounded-2xl p-3 transition hover:bg-brand-soft"
+                    className="hover-lift group flex items-start gap-3 rounded-2xl p-3 hover:bg-brand-soft"
                   >
-                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white">
+                    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white transition-transform duration-300 group-hover:scale-110">
                       <SIcon className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">

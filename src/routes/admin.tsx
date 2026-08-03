@@ -86,7 +86,7 @@ function Page() {
           </div>
           <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {kpis.map((k) => (
-              <div key={k.label} className="rounded-2xl bg-white/10 p-4 backdrop-blur">
+              <div key={k.label} className="hover-lift cursor-default rounded-2xl bg-white/10 p-4 backdrop-blur hover:bg-white/20">
                 <div className="font-mono text-2xl font-bold">{k.value}</div>
                 <div className="text-xs uppercase tracking-widest text-white/70">{k.label}</div>
               </div>
@@ -94,17 +94,17 @@ function Page() {
           </div>
         </div>
 
-        <div className="mt-6 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
           {tabs.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
               className={
-                "flex shrink-0 items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-medium transition " +
+                "hover-lift flex min-w-0 items-center justify-center gap-2 rounded-2xl px-3 py-2.5 text-center text-xs font-medium sm:text-sm " +
                 (tab === key ? "bg-brand-gradient text-white shadow-soft" : "bg-secondary text-muted-foreground hover:text-brand")
               }
             >
-              <Icon className="h-4 w-4" /> {label}
+              <Icon className="h-4 w-4 shrink-0" /> <span className="truncate">{label}</span>
             </button>
           ))}
         </div>
@@ -128,7 +128,7 @@ function Page() {
                   </thead>
                   <tbody>
                     {members.map((m) => (
-                      <tr key={m.id} className="bg-card transition hover:bg-brand-soft/40">
+                      <tr key={m.id} className="bg-card transition duration-300 hover:bg-brand-soft/60">
                         <td className="rounded-l-2xl px-3 py-3 font-medium">{m.prenom} {m.nom}</td>
                         <td className="px-3 py-3">{m.commune}</td>
                         <td className="hidden px-3 py-3 font-mono text-xs md:table-cell">{m.telephone}</td>

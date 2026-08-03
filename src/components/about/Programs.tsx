@@ -88,7 +88,7 @@ export function Programs() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {upcomingEvents.map((e) => (
-            <div key={e.title} className="glass-card rounded-3xl p-5 shadow-soft">
+            <div key={e.title} className="hover-lift glass-card rounded-3xl p-5 shadow-soft">
               <div className="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-3 py-1 text-xs font-semibold text-white">
                 <span className="font-numeric">{e.date}</span>
               </div>

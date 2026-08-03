@@ -49,7 +49,7 @@ export function HeroBento() {
         </div>
 
         {/* Members counter */}
-        <div className="glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
+        <div className="hover-lift glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
           <div className="flex items-center gap-2 text-xs text-muted-foreground"><Users className="h-4 w-4" /> Membres</div>
           <div>
             <div className="font-numeric text-3xl font-bold text-foreground sm:text-4xl">{count.toLocaleString("fr-FR")}</div>
@@ -58,7 +58,7 @@ export function HeroBento() {
         </div>
 
         {/* Next service */}
-        <div className="glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
+        <div className="hover-lift glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
           <div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarClock className="h-4 w-4" /> Prochain culte</div>
           <div>
             <div className="font-display text-lg font-bold text-foreground">Dimanche</div>
@@ -95,7 +95,7 @@ export function HeroBento() {
         </Link>
 
         {/* Pastor quote */}
-        <div className="col-span-2 glass-card flex items-start gap-3 rounded-3xl p-4 sm:p-5">
+        <div className="col-span-2 hover-lift glass-card flex items-start gap-3 rounded-3xl p-4 sm:p-5">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white">
             <Quote className="h-5 w-5" />
           </div>
