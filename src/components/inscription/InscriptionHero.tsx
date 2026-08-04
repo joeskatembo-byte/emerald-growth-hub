@@ -1,4 +1,5 @@
 import { UserPlus, HeartHandshake, ShieldCheck, Sparkles } from "lucide-react";
+import { TypedText } from "@/components/ui/typed-text";
 
 export function InscriptionHero() {
   return (
@@ -10,8 +11,15 @@ export function InscriptionHero() {
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs uppercase tracking-widest backdrop-blur">
             <Sparkles className="h-3.5 w-3.5" /> Bienvenue à la maison
           </div>
-          <h1 className="mt-4 max-w-2xl font-display text-4xl font-bold leading-tight sm:text-5xl">
-            Devenez membre, entrez dans la famille
+          <h1 className="mt-4 min-h-[4.5rem] max-w-2xl font-display text-4xl font-bold leading-tight sm:min-h-[7.5rem] sm:text-5xl">
+            <TypedText
+              items={[
+                "Devenez membre, entrez dans la famille",
+                "Une place vous est déjà réservée",
+                "Vos dons portent du fruit ici",
+                "Ensemble, servons avec joie",
+              ]}
+            />
           </h1>
           <p className="mt-4 max-w-xl text-white/80">
             Un compte, c'est bien plus qu'un profil : c'est une place réservée, un berger qui vous connaît
@@ -23,8 +31,8 @@ export function InscriptionHero() {
               { Icon: HeartHandshake, t: "Un accueil", d: "Un serviteur vous contacte" },
               { Icon: ShieldCheck, t: "Confidentiel", d: "Vos données restent protégées" },
             ].map(({ Icon, t, d }) => (
-              <div key={t} className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-                <Icon className="h-5 w-5" />
+              <div key={t} className="group hover-tilt rounded-2xl bg-white/10 p-4 backdrop-blur hover:bg-white/20">
+                <Icon className="icon-pop h-5 w-5" />
                 <div className="mt-2 font-display text-sm font-semibold">{t}</div>
                 <div className="text-xs text-white/70">{d}</div>
               </div>
