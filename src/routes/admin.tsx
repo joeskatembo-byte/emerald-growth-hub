@@ -1,7 +1,8 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck, X, User } from "lucide-react";
+import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
@@ -9,7 +10,7 @@ import { news, testimonials, media } from "@/data/mock";
 import { projects } from "@/data/don";
 import { departments } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
-import { useSession, useMembers, removeMember, updateMember, logout } from "@/lib/session";
+import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -42,6 +43,7 @@ function Page() {
   const { user, ready } = useSession();
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>("membres");
+  const [detailMember, setDetailMember] = useState<Member | null>(null);
   const members = useMembers();
 
   useEffect(() => {
@@ -128,11 +130,15 @@ function Page() {
                   </thead>
                   <tbody>
                     {members.map((m) => (
-                      <tr key={m.id} className="bg-card transition duration-300 hover:bg-brand-soft/60">
+                      <tr
+                        key={m.id}
+                        onClick={() => setDetailMember(m)}
+                        className="cursor-pointer bg-card transition duration-300 hover:bg-brand-soft/60"
+                      >
                         <td className="rounded-l-2xl px-3 py-3 font-medium">{m.prenom} {m.nom}</td>
                         <td className="px-3 py-3">{m.commune}</td>
                         <td className="hidden px-3 py-3 font-mono text-xs md:table-cell">{m.telephone}</td>
-                        <td className="px-3 py-3">
+                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <FancySelect
                             size="sm"
                             className="min-w-[8rem]"
@@ -142,7 +148,7 @@ function Page() {
                             options={["Aucun", ...departmentNames]}
                           />
                         </td>
-                        <td className="px-3 py-3">
+                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <FancySelect
                             size="sm"
                             className="min-w-[7rem]"
@@ -156,7 +162,7 @@ function Page() {
                             ]}
                           />
                         </td>
-                        <td className="rounded-r-2xl px-3 py-3 text-right">
+                        <td className="rounded-r-2xl px-3 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                           <button
                             onClick={() => m.id !== user.id && removeMember(m.id)}
                             aria-label="Supprimer"
@@ -174,6 +180,60 @@ function Page() {
               <p className="mt-3 text-xs text-muted-foreground">Communes disponibles : {communes.length}.</p>
             </div>
           )}
+
+          {detailMember && typeof document !== "undefined" &&
+            createPortal(
+              <div className="fixed inset-0 z-[9998] grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm" onClick={() => setDetailMember(null)}>
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  onClick={(e) => e.stopPropagation()}
+                  className="animate-fade-in max-h-[85vh] w-[min(420px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground">Fidèle</p>
+                      <h3 className="font-display text-xl font-bold">{detailMember.prenom} {detailMember.nom}</h3>
+                    </div>
+                    <button onClick={() => setDetailMember(null)} aria-label="Fermer" className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground transition hover:text-brand">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="mt-5 space-y-4">
+                    <div className="flex justify-center">
+                      {detailMember.photo ? (
+                        <img src={detailMember.photo} alt={`${detailMember.prenom} ${detailMember.nom}`} className="h-32 w-32 rounded-2xl object-cover shadow-soft" />
+                      ) : (
+                        <div className="grid h-32 w-32 place-items-center rounded-2xl bg-brand-soft/40 text-brand shadow-soft">
+                          <User className="h-14 w-14" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-brand-soft/40 p-4">
+                        <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">État civil</div>
+                        <p className="mt-1 text-sm font-medium">{detailMember.etatCivil}</p>
+                      </div>
+                      {detailMember.etatCivil === "Marié(e)" && (
+                        <div className="rounded-2xl bg-brand-soft/40 p-4">
+                          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Enfants</div>
+                          <p className="mt-1 text-sm font-medium">{detailMember.enfants}</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="rounded-2xl bg-brand-soft/40 p-4">
+                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Numéro d'urgence</div>
+                      <p className="mt-1 font-mono text-sm">{detailMember.urgence}</p>
+                    </div>
+                    <div className="rounded-2xl bg-brand-soft/40 p-4">
+                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Anniversaire</div>
+                      <p className="mt-1 font-mono text-sm">{detailMember.naissance}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>,
+              document.body,
+            )}
 
           {tab === "news" && (
             <CrudSection
