@@ -1,6 +1,7 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search } from "lucide-react";
+import { createPortal } from "react-dom";
 import { useCollection, type Row } from "@/lib/collections";
 
 export type Column = {
@@ -10,6 +11,8 @@ export type Column = {
   options?: readonly string[];
   mono?: boolean;
   hideOnMobile?: boolean;
+  /** Masquée dans le tableau : visible seulement dans la modale de détail et le formulaire. */
+  detailOnly?: boolean;
 };
 
 const field =
@@ -28,6 +31,9 @@ export function CrudSection<T extends Row>({
   const [editing, setEditing] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
   const [q, setQ] = useState("");
+  const [detail, setDetail] = useState<T | null>(null);
+  const tableColumns = columns.filter((c) => !c.detailOnly);
+  const detailColumns = columns.filter((c) => c.detailOnly);
 
   const startNew = () => {
     setDraft(Object.fromEntries(columns.map((c) => [c.key, c.type === "number" ? 0 : c.options?.[0] ?? ""])));
@@ -105,24 +111,28 @@ export function CrudSection<T extends Row>({
         </div>
       )}
 
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full min-w-[520px] border-separate border-spacing-y-2 text-sm">
+      <div className="mt-4">
+        <table className="w-full table-fixed border-separate border-spacing-y-2 text-sm">
           <thead>
             <tr className="text-left text-xs uppercase tracking-widest text-muted-foreground">
-              {columns.map((c) => (
+              {tableColumns.map((c) => (
                 <th key={c.key} className={"px-3 pb-1 font-medium " + (c.hideOnMobile ? "hidden md:table-cell" : "")}>{c.label}</th>
               ))}
-              <th className="px-3 pb-1 text-right font-medium">Actions</th>
+              <th className="w-24 px-3 pb-1 text-right font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((r) => (
-              <tr key={r.id} className="bg-card transition duration-300 hover:bg-brand-soft/60">
-                {columns.map((c, i) => (
+              <tr
+                key={r.id}
+                onClick={() => detailColumns.length > 0 && setDetail(r)}
+                className={"bg-card transition duration-300 hover:bg-brand-soft/60 " + (detailColumns.length > 0 ? "cursor-pointer" : "")}
+              >
+                {tableColumns.map((c, i) => (
                   <td
                     key={c.key}
                     className={
-                      "max-w-[280px] truncate px-3 py-3 " +
+                      "truncate px-3 py-3 " +
                       (i === 0 ? "rounded-l-2xl font-medium" : "") +
                       (c.mono || c.type === "number" ? " font-mono text-xs" : "") +
                       (c.hideOnMobile ? " hidden md:table-cell" : "")
@@ -133,10 +143,10 @@ export function CrudSection<T extends Row>({
                 ))}
                 <td className="rounded-r-2xl px-3 py-3 text-right">
                   <div className="flex justify-end gap-1.5">
-                    <button onClick={() => startEdit(r)} aria-label="Modifier" className="grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground transition hover:text-brand">
+                    <button onClick={(e) => { e.stopPropagation(); startEdit(r); }} aria-label="Modifier" className="grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground transition hover:text-brand">
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
-                    <button onClick={() => remove(r.id)} aria-label="Supprimer" className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive transition hover:bg-destructive/20">
+                    <button onClick={(e) => { e.stopPropagation(); remove(r.id); }} aria-label="Supprimer" className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive transition hover:bg-destructive/20">
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -144,11 +154,42 @@ export function CrudSection<T extends Row>({
               </tr>
             ))}
             {filtered.length === 0 && (
-              <tr><td colSpan={columns.length + 1} className="rounded-2xl bg-card px-3 py-8 text-center text-muted-foreground">Aucun enregistrement.</td></tr>
+              <tr><td colSpan={tableColumns.length + 1} className="rounded-2xl bg-card px-3 py-8 text-center text-muted-foreground">Aucun enregistrement.</td></tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {detail && typeof document !== "undefined" &&
+        createPortal(
+          <div className="fixed inset-0 z-[9998] grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm" onClick={() => setDetail(null)}>
+            <div
+              role="dialog"
+              aria-modal="true"
+              onClick={(e) => e.stopPropagation()}
+              className="animate-fade-in max-h-[85vh] w-[min(560px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground">{title}</p>
+                  <h3 className="font-display text-xl font-bold">{String(detail[tableColumns[0].key] ?? "Détail")}</h3>
+                </div>
+                <button onClick={() => setDetail(null)} aria-label="Fermer" className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground transition hover:text-brand">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-5 space-y-4">
+                {detailColumns.map((c) => (
+                  <div key={c.key} className="rounded-2xl bg-brand-soft/40 p-4">
+                    <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{c.label}</div>
+                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed">{String(detail[c.key] ?? "—")}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
