@@ -130,11 +130,15 @@ function Page() {
                   </thead>
                   <tbody>
                     {members.map((m) => (
-                      <tr key={m.id} className="bg-card transition duration-300 hover:bg-brand-soft/60">
+                      <tr
+                        key={m.id}
+                        onClick={() => setDetailMember(m)}
+                        className="cursor-pointer bg-card transition duration-300 hover:bg-brand-soft/60"
+                      >
                         <td className="rounded-l-2xl px-3 py-3 font-medium">{m.prenom} {m.nom}</td>
                         <td className="px-3 py-3">{m.commune}</td>
                         <td className="hidden px-3 py-3 font-mono text-xs md:table-cell">{m.telephone}</td>
-                        <td className="px-3 py-3">
+                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <FancySelect
                             size="sm"
                             className="min-w-[8rem]"
@@ -144,7 +148,7 @@ function Page() {
                             options={["Aucun", ...departmentNames]}
                           />
                         </td>
-                        <td className="px-3 py-3">
+                        <td className="px-3 py-3" onClick={(e) => e.stopPropagation()}>
                           <FancySelect
                             size="sm"
                             className="min-w-[7rem]"
@@ -158,7 +162,7 @@ function Page() {
                             ]}
                           />
                         </td>
-                        <td className="rounded-r-2xl px-3 py-3 text-right">
+                        <td className="rounded-r-2xl px-3 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                           <button
                             onClick={() => m.id !== user.id && removeMember(m.id)}
                             aria-label="Supprimer"
