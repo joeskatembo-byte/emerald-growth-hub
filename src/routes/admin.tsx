@@ -260,19 +260,19 @@ const mediaCols: Column[] = [
 const projectCols: Column[] = [
   { key: "title", label: "Projet" },
   { key: "status", label: "Statut", type: "select", options: ["en-cours", "termine"] },
-  { key: "description", label: "Description", type: "textarea" },
   { key: "budget", label: "Budget ($)", type: "number" },
   { key: "raised", label: "Récolté ($)", type: "number" },
   { key: "since", label: "Période", hideOnMobile: true },
+  { key: "description", label: "Description", type: "textarea", detailOnly: true },
 ];
 
 const deptCols: Column[] = [
   { key: "name", label: "Département" },
   { key: "leader", label: "Dirigeant" },
-  { key: "vision", label: "Vision", type: "textarea" },
-  { key: "mission", label: "Mission", type: "textarea" },
-  { key: "schedule", label: "Horaire", hideOnMobile: true },
   { key: "next", label: "Prochaine activité", hideOnMobile: true },
+  { key: "vision", label: "Vision", type: "textarea", detailOnly: true },
+  { key: "mission", label: "Mission", type: "textarea", detailOnly: true },
+  { key: "schedule", label: "Horaire", detailOnly: true },
 ];
 
 const msgCols: Column[] = [
