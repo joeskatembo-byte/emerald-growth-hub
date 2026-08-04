@@ -43,6 +43,7 @@ function Page() {
   const { user, ready } = useSession();
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>("membres");
+  const [detailMember, setDetailMember] = useState<Member | null>(null);
   const members = useMembers();
 
   useEffect(() => {
