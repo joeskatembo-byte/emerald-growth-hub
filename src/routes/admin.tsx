@@ -10,7 +10,7 @@ import { news, testimonials, media } from "@/data/mock";
 import { projects } from "@/data/don";
 import { departments } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
-import { useSession, useMembers, removeMember, updateMember, logout } from "@/lib/session";
+import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
