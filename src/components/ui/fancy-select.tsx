@@ -140,7 +140,7 @@ export function FancySelect({
               />
             </div>
           )}
-          <div className="max-h-64 overflow-y-auto overscroll-contain">
+          <div className="max-h-64 overflow-y-auto overscroll-contain no-scrollbar">
             {filtered.length === 0 && (
               <div className="px-3 py-6 text-center text-sm text-muted-foreground">Aucun résultat</div>
             )}

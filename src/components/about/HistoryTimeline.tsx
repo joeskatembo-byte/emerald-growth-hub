@@ -34,7 +34,7 @@ export function HistoryTimeline() {
       </div>
 
       {/* Timeline rail */}
-      <div className="mt-6 overflow-x-auto pb-2">
+      <div className="mt-6 no-scrollbar overflow-x-auto pb-2">
         <div className="relative flex min-w-max items-center gap-3 px-1">
           <div className="absolute left-0 right-0 top-6 h-px bg-border" />
           {timeline.map((t, i) => {

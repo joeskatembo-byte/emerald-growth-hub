@@ -252,3 +252,43 @@
 @media (prefers-reduced-motion: reduce) {
   .story-bar-fill, .marquee-track { animation: none !important; }
 }
+
+/* Masquer les barres de défilement (contenu toujours scrollable au besoin) */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; width: 0; height: 0; }
+}
+
+/* Curseur clignotant du texte "typed" */
+@keyframes typed-blink {
+  0%, 45% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.typed-cursor {
+  display: inline-block;
+  width: 2px;
+  margin-left: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  vertical-align: -0.06em;
+  animation: typed-blink 1s steps(1, end) infinite;
+}
+
+/* Micro-interaction : légère inclinaison + montée */
+@utility hover-tilt {
+  transition: transform 380ms cubic-bezier(0.34, 1.36, 0.64, 1), box-shadow 380ms ease, background-color 380ms ease;
+  &:hover {
+    transform: translateY(-5px) rotate(-0.6deg) scale(1.02);
+    box-shadow: 0 24px 48px -26px rgba(15, 90, 62, 0.45);
+  }
+}
+
+/* Icône qui rebondit quand on survole la carte parente */
+.icon-pop { transition: transform 380ms cubic-bezier(0.34, 1.36, 0.64, 1); }
+.group:hover .icon-pop { transform: translateY(-2px) scale(1.12) rotate(-6deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .typed-cursor { animation: none !important; }
+  .hover-tilt:hover, .hover-lift:hover { transform: none !important; }
+}

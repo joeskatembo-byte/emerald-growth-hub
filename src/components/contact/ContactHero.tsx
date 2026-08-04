@@ -23,7 +23,7 @@ export function ContactHero() {
               { Icon: Phone, k: "Téléphone", v: "+243 000 000 000" },
               { Icon: Mail, k: "E-mail", v: "contact@emmanuel-rdc.org" },
             ].map(({ Icon, k, v }) => (
-              <div key={k} className="glass-card flex items-center gap-3 rounded-2xl p-3.5">
+              <div key={k} className="group glass-card hover-tilt flex items-center gap-3 rounded-2xl p-3.5">
                 <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-gradient text-white">
                   <Icon className="h-4 w-4" />
                 </div>

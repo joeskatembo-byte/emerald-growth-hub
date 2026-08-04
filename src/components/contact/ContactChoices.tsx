@@ -37,7 +37,7 @@ export function ContactChoices({ onOpen }: { onOpen: (kind: ContactKind) => void
           <button
             key={key}
             onClick={() => onOpen(key)}
-            className="group glass-card relative overflow-hidden rounded-3xl p-6 text-left shadow-soft transition hover:-translate-y-1 hover:shadow-lg"
+            className="group glass-card hover-tilt relative overflow-hidden rounded-3xl p-6 text-left shadow-soft"
           >
             <div className={"pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br opacity-30 blur-2xl transition group-hover:opacity-60 " + hue} />
             <div className={"relative grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-soft " + hue}>
