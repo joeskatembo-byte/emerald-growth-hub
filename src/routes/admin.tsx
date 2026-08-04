@@ -181,6 +181,60 @@ function Page() {
             </div>
           )}
 
+          {detailMember && typeof document !== "undefined" &&
+            createPortal(
+              <div className="fixed inset-0 z-[9998] grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm" onClick={() => setDetailMember(null)}>
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  onClick={(e) => e.stopPropagation()}
+                  className="animate-fade-in max-h-[85vh] w-[min(420px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground">Fidèle</p>
+                      <h3 className="font-display text-xl font-bold">{detailMember.prenom} {detailMember.nom}</h3>
+                    </div>
+                    <button onClick={() => setDetailMember(null)} aria-label="Fermer" className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground transition hover:text-brand">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="mt-5 space-y-4">
+                    <div className="flex justify-center">
+                      {detailMember.photo ? (
+                        <img src={detailMember.photo} alt={`${detailMember.prenom} ${detailMember.nom}`} className="h-32 w-32 rounded-2xl object-cover shadow-soft" />
+                      ) : (
+                        <div className="grid h-32 w-32 place-items-center rounded-2xl bg-brand-soft/40 text-brand shadow-soft">
+                          <User className="h-14 w-14" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-2xl bg-brand-soft/40 p-4">
+                        <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">État civil</div>
+                        <p className="mt-1 text-sm font-medium">{detailMember.etatCivil}</p>
+                      </div>
+                      {detailMember.etatCivil === "Marié(e)" && (
+                        <div className="rounded-2xl bg-brand-soft/40 p-4">
+                          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Enfants</div>
+                          <p className="mt-1 text-sm font-medium">{detailMember.enfants}</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="rounded-2xl bg-brand-soft/40 p-4">
+                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Numéro d'urgence</div>
+                      <p className="mt-1 font-mono text-sm">{detailMember.urgence}</p>
+                    </div>
+                    <div className="rounded-2xl bg-brand-soft/40 p-4">
+                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Anniversaire</div>
+                      <p className="mt-1 font-mono text-sm">{detailMember.naissance}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>,
+              document.body,
+            )}
+
           {tab === "news" && (
             <CrudSection
               title="Actualités"
