@@ -33,7 +33,7 @@ export function DonHero() {
               { k: "100 %", v: "traçabilité" },
               { k: "48", v: "diplômés envoyés" },
             ].map((s) => (
-              <div key={s.v} className="glass-card rounded-2xl p-4">
+              <div key={s.v} className="group glass-card hover-tilt rounded-2xl p-4">
                 <div className="font-numeric text-2xl font-bold text-brand">{s.k}</div>
                 <div className="mt-1 text-xs text-muted-foreground">{s.v}</div>
               </div>
