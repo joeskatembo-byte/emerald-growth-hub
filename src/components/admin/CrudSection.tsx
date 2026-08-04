@@ -167,7 +167,7 @@ export function CrudSection<T extends Row>({
               role="dialog"
               aria-modal="true"
               onClick={(e) => e.stopPropagation()}
-              className="animate-fade-in max-h-[85vh] w-[min(560px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
+              className="animate-fade-in no-scrollbar max-h-[85vh] w-[min(560px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>

@@ -116,7 +116,7 @@ function Page() {
             <div className="animate-fade-in glass-card rounded-3xl p-5 shadow-soft sm:p-6">
               <h2 className="font-display text-lg font-bold">Fidèles de l'église</h2>
               <p className="text-xs text-muted-foreground">Modifier le rôle, le département ou retirer un membre.</p>
-              <div className="mt-4 overflow-x-auto">
+              <div className="mt-4 no-scrollbar overflow-x-auto">
                 <table className="w-full min-w-[640px] border-separate border-spacing-y-2 text-sm">
                   <thead>
                     <tr className="text-left text-xs uppercase tracking-widest text-muted-foreground">

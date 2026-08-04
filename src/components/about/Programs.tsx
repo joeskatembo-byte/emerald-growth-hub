@@ -34,7 +34,7 @@ export function Programs() {
       </div>
 
       {/* Day switcher */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex flex-wrap gap-2 pb-1">
         {days.map((d, i) => {
           const isActive = i === selected;
           const isToday = i === getTodayIndex();
