@@ -239,15 +239,15 @@ function Page() {
 const newsCols: Column[] = [
   { key: "kind", label: "Type" },
   { key: "dept", label: "Département", type: "select", options: departmentNames },
-  { key: "body", label: "Contenu", type: "textarea" },
   { key: "when", label: "Quand", mono: true, hideOnMobile: true },
+  { key: "body", label: "Contenu", type: "textarea", detailOnly: true },
 ];
 
 const testiCols: Column[] = [
   { key: "name", label: "Nom" },
-  { key: "body", label: "Témoignage", type: "textarea" },
   { key: "when", label: "Date", mono: true, hideOnMobile: true },
   { key: "likes", label: "J'aime", type: "number" },
+  { key: "body", label: "Témoignage", type: "textarea", detailOnly: true },
 ];
 
 const mediaCols: Column[] = [
@@ -278,9 +278,9 @@ const deptCols: Column[] = [
 const msgCols: Column[] = [
   { key: "type", label: "Type", type: "select", options: ["Intercession", "Rendez-vous", "Message"] },
   { key: "name", label: "Expéditeur" },
-  { key: "content", label: "Contenu", type: "textarea" },
   { key: "status", label: "Statut", type: "select", options: ["Nouveau", "En cours", "Traité"] },
   { key: "date", label: "Date", mono: true, hideOnMobile: true },
+  { key: "content", label: "Contenu", type: "textarea", detailOnly: true },
 ];
 
 const seedMessages = [
