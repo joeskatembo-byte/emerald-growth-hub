@@ -188,7 +188,7 @@ function Page() {
                   role="dialog"
                   aria-modal="true"
                   onClick={(e) => e.stopPropagation()}
-                  className="animate-fade-in max-h-[85vh] w-[min(420px,100%)] overflow-y-auto rounded-3xl bg-card p-6 shadow-soft"
+                  className="animate-fade-in no-scrollbar max-h-[90vh] w-[min(620px,100%)] overflow-y-auto rounded-3xl bg-card p-5 shadow-soft sm:p-6"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -199,35 +199,35 @@ function Page() {
                       <X className="h-4 w-4" />
                     </button>
                   </div>
-                  <div className="mt-5 space-y-4">
-                    <div className="flex justify-center">
+                  <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start">
+                    <div className="flex justify-center sm:justify-start">
                       {detailMember.photo ? (
-                        <img src={detailMember.photo} alt={`${detailMember.prenom} ${detailMember.nom}`} className="h-32 w-32 rounded-2xl object-cover shadow-soft" />
+                        <img src={detailMember.photo} alt={`${detailMember.prenom} ${detailMember.nom}`} className="h-24 w-24 rounded-2xl object-cover shadow-soft sm:h-28 sm:w-28" />
                       ) : (
-                        <div className="grid h-32 w-32 place-items-center rounded-2xl bg-brand-soft/40 text-brand shadow-soft">
-                          <User className="h-14 w-14" />
+                        <div className="grid h-24 w-24 place-items-center rounded-2xl bg-brand-soft/40 text-brand shadow-soft sm:h-28 sm:w-28">
+                          <User className="h-12 w-12" />
                         </div>
                       )}
                     </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl bg-brand-soft/40 p-4">
+                    <div className="grid min-w-0 flex-1 gap-2.5 sm:grid-cols-2">
+                      <div className="hover-lift rounded-2xl bg-brand-soft/40 p-3">
                         <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">État civil</div>
                         <p className="mt-1 text-sm font-medium">{detailMember.etatCivil}</p>
                       </div>
                       {detailMember.etatCivil === "Marié(e)" && (
-                        <div className="rounded-2xl bg-brand-soft/40 p-4">
+                        <div className="hover-lift rounded-2xl bg-brand-soft/40 p-3">
                           <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Enfants</div>
                           <p className="mt-1 text-sm font-medium">{detailMember.enfants}</p>
                         </div>
                       )}
-                    </div>
-                    <div className="rounded-2xl bg-brand-soft/40 p-4">
-                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Numéro d'urgence</div>
-                      <p className="mt-1 font-mono text-sm">{detailMember.urgence}</p>
-                    </div>
-                    <div className="rounded-2xl bg-brand-soft/40 p-4">
-                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Anniversaire</div>
-                      <p className="mt-1 font-mono text-sm">{detailMember.naissance}</p>
+                      <div className="hover-lift rounded-2xl bg-brand-soft/40 p-3">
+                        <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Numéro d'urgence</div>
+                        <p className="mt-1 truncate font-mono text-sm">{detailMember.urgence}</p>
+                      </div>
+                      <div className="hover-lift rounded-2xl bg-brand-soft/40 p-3">
+                        <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Anniversaire</div>
+                        <p className="mt-1 font-mono text-sm">{detailMember.naissance}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
