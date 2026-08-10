@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useCollection, type Row } from "@/lib/collections";
+import { useConfirm } from "@/components/ui/confirm";
 
 export type Column = {
   key: string;
@@ -28,6 +29,7 @@ export function CrudSection<T extends Row>({
   columns: Column[];
 }) {
   const { rows, create, update, remove, reset } = useCollection<T>(storageKey, seed);
+  const { confirmDelete } = useConfirm();
   const [editing, setEditing] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
   const [q, setQ] = useState("");
@@ -146,7 +148,18 @@ export function CrudSection<T extends Row>({
                     <button onClick={(e) => { e.stopPropagation(); startEdit(r); }} aria-label="Modifier" className="grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground transition hover:text-brand">
                       <Pencil className="h-3.5 w-3.5" />
                     </button>
-                    <button onClick={(e) => { e.stopPropagation(); remove(r.id); }} aria-label="Supprimer" className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive transition hover:bg-destructive/20">
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        const ok = await confirmDelete({
+                          description: `Voulez-vous vraiment supprimer « ${String(r[tableColumns[0].key] ?? "cet élément")} » ? Cette action est définitive.`,
+                          successDescription: "L'enregistrement a bien été supprimé.",
+                        });
+                        if (ok) remove(r.id);
+                      }}
+                      aria-label="Supprimer"
+                      className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive transition hover:bg-destructive/20"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>

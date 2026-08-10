@@ -11,6 +11,7 @@ import { projects } from "@/data/don";
 import { departments } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
 import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
+import { useConfirm } from "@/components/ui/confirm";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -44,6 +45,7 @@ function Page() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>("membres");
   const [detailMember, setDetailMember] = useState<Member | null>(null);
+  const { confirmDelete } = useConfirm();
   const members = useMembers();
 
   useEffect(() => {
@@ -164,7 +166,16 @@ function Page() {
                         </td>
                         <td className="rounded-r-2xl px-3 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                           <button
-                            onClick={() => m.id !== user.id && removeMember(m.id)}
+                            onClick={async () => {
+                              if (m.id === user.id) return;
+                              const ok = await confirmDelete({
+                                title: "Supprimer ce fidèle ?",
+                                description: `Voulez-vous vraiment supprimer le compte de ${m.prenom} ${m.nom} ? Cette action est définitive.`,
+                                successTitle: "Fidèle supprimé",
+                                successDescription: "Le compte a bien été retiré de la liste des fidèles.",
+                              });
+                              if (ok) removeMember(m.id);
+                            }}
                             aria-label="Supprimer"
                             className="grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive transition hover:bg-destructive/20 disabled:opacity-30"
                             disabled={m.id === user.id}
