@@ -20,13 +20,15 @@ const field =
   "w-full rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function CrudSection<T extends Row>({
-  title, description, storageKey, seed, columns,
+  title, description, storageKey, seed, columns, rowAction,
 }: {
   title: string;
   description: string;
   storageKey: string;
   seed: T[];
   columns: Column[];
+  /** Action supplémentaire par ligne (ex. validation d'un témoignage). */
+  rowAction?: (row: T, update: (id: string, patch: Partial<T>) => void) => React.ReactNode;
 }) {
   const { rows, create, update, remove, reset } = useCollection<T>(storageKey, seed);
   const { confirmDelete } = useConfirm();
@@ -145,6 +147,9 @@ export function CrudSection<T extends Row>({
                 ))}
                 <td className="rounded-r-2xl px-3 py-3 text-right">
                   <div className="flex justify-end gap-1.5">
+                    {rowAction && (
+                      <span onClick={(e) => e.stopPropagation()} className="contents">{rowAction(r, update)}</span>
+                    )}
                     <button onClick={(e) => { e.stopPropagation(); startEdit(r); }} aria-label="Modifier" className="grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground transition hover:text-brand">
                       <Pencil className="h-3.5 w-3.5" />
                     </button>

@@ -64,11 +64,26 @@ export const news = [
   },
 ];
 
-export const testimonials = [
-  { id: "t1", name: "Grâce Mbayo", initial: "G", body: "Le Seigneur a guéri ma fille après la prière du pasteur. Toute la gloire à Jésus.", when: "12 mars · 21:04", likes: 148 },
-  { id: "t2", name: "Jonathan K.", initial: "J", body: "J'ai retrouvé un emploi après 2 ans. Dieu est fidèle à ses promesses.", when: "10 mars · 14:22", likes: 96 },
-  { id: "t3", name: "Esther N.", initial: "E", body: "Depuis mon baptême, ma vie n'est plus la même. Merci Jésus.", when: "8 mars · 09:11", likes: 212 },
-  { id: "t4", name: "Papa Célestin", initial: "C", body: "Réconciliation dans ma famille après des années de silence. Alléluia.", when: "6 mars · 18:47", likes: 74 },
+export const TESTIMONIALS_KEY = "ee.testimonials.v1";
+export const testimonyStatuses = ["En attente", "Validé"] as const;
+export type TestimonyStatus = (typeof testimonyStatuses)[number];
+
+export type Testimony = {
+  id: string;
+  name: string;
+  initial: string;
+  body: string;
+  when: string;
+  likes: number;
+  status: TestimonyStatus;
+};
+
+export const testimonials: Testimony[] = [
+  { id: "t1", name: "Grâce Mbayo", initial: "G", body: "Le Seigneur a guéri ma fille après la prière du pasteur. Toute la gloire à Jésus.", when: "12 mars · 21:04", likes: 148, status: "Validé" },
+  { id: "t2", name: "Jonathan K.", initial: "J", body: "J'ai retrouvé un emploi après 2 ans. Dieu est fidèle à ses promesses.", when: "10 mars · 14:22", likes: 96, status: "Validé" },
+  { id: "t3", name: "Esther N.", initial: "E", body: "Depuis mon baptême, ma vie n'est plus la même. Merci Jésus.", when: "8 mars · 09:11", likes: 212, status: "Validé" },
+  { id: "t4", name: "Papa Célestin", initial: "C", body: "Réconciliation dans ma famille après des années de silence. Alléluia.", when: "6 mars · 18:47", likes: 74, status: "Validé" },
+  { id: "t5", name: "Sarah Ilunga", initial: "S", body: "Le Seigneur m'a délivrée de l'angoisse. Je veux le témoigner à toute l'assemblée.", when: "Aujourd'hui · 08:12", likes: 0, status: "En attente" },
 ];
 
 export const meditation = {
@@ -78,6 +93,32 @@ export const meditation = {
   servant: "Pasteur Emmanuel",
   initial: "E",
 };
+
+export const MEDITATION_KEY = "ee.meditation.v1";
+
+export type Meditation = {
+  id: string;
+  book: string;
+  verse: string;
+  body: string;
+  servant: string;
+  initial: string;
+  /** "Oui" = méditation affichée sur la page d'accueil. */
+  active: "Oui" | "Non";
+};
+
+export const meditations: Meditation[] = [
+  { id: "m1", ...meditation, active: "Oui" },
+  {
+    id: "m2",
+    book: "Psaume",
+    verse: "27 : 1",
+    body: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? Marche aujourd'hui dans cette assurance.",
+    servant: "Past. Deborah",
+    initial: "D",
+    active: "Non",
+  },
+];
 
 export type Media = {
   id: string;
