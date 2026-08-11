@@ -268,6 +268,7 @@
 .typed-cursor {
   display: inline-block;
   width: 2px;
+  height: 1em;
   margin-left: 4px;
   border-radius: 2px;
   background: currentColor;

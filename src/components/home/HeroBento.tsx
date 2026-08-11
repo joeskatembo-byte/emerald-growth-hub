@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { verses } from "@/data/mock";
 import { ArrowRight, Users, CalendarClock, Sparkles, Quote } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { TypedVerse } from "@/components/ui/typed-verse";
 
 export function HeroBento() {
   const [verseIdx, setVerseIdx] = useState(0);
   const [count, setCount] = useState(0);
   const target = 1247;
-
-  useEffect(() => {
-    const t = setInterval(() => setVerseIdx((i) => (i + 1) % verses.length), 4200);
-    return () => clearInterval(t);
-  }, []);
+  const handleIndexChange = useCallback((i: number) => setVerseIdx(i), []);
 
   useEffect(() => {
     let raf = 0;
@@ -25,8 +22,6 @@ export function HeroBento() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const v = verses[verseIdx];
-
   return (
     <section className="mx-auto mt-6 w-[min(1200px,95%)]">
       <div className="grid auto-rows-[minmax(120px,auto)] grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
@@ -36,10 +31,12 @@ export function HeroBento() {
             <Sparkles className="h-3.5 w-3.5" /> Parole du jour
           </div>
           <div className="min-h-[120px]">
-            <p key={verseIdx} className="animate-fade-in font-display text-2xl font-bold leading-tight sm:text-4xl">
-              « {v.text} »
-            </p>
-            {v.ref && <p className="mt-2 font-numeric text-xs tracking-wider text-white/70">{v.ref}</p>}
+            <TypedVerse
+              items={verses}
+              onIndexChange={handleIndexChange}
+              className="font-display text-2xl font-bold leading-tight sm:text-4xl"
+              refClassName="mt-2 font-numeric text-xs tracking-wider text-white/70"
+            />
           </div>
           <div className="flex items-center gap-1.5">
             {verses.map((_, i) => (
