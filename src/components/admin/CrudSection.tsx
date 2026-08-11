@@ -122,7 +122,7 @@ export function CrudSection<T extends Row>({
               {tableColumns.map((c) => (
                 <th key={c.key} className={"px-3 pb-1 font-medium " + (c.hideOnMobile ? "hidden md:table-cell" : "")}>{c.label}</th>
               ))}
-              <th className="w-24 px-3 pb-1 text-right font-medium">Actions</th>
+              <th className={(rowAction ? "w-32" : "w-24") + " px-3 pb-1 text-right font-medium"}>Actions</th>
             </tr>
           </thead>
           <tbody>
