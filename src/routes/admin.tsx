@@ -1,12 +1,13 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck, X, User } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
-import { news, testimonials, media } from "@/data/mock";
+import { news, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
+import { MeditationSection } from "@/components/admin/MeditationSection";
 import { projects } from "@/data/don";
 import { departments } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
@@ -28,12 +29,13 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "medias" | "projets" | "departements" | "messages";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "messages";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
   { key: "news", label: "Actualités", icon: Newspaper },
   { key: "temoignages", label: "Témoignages", icon: Quote },
+  { key: "meditation", label: "Méditation", icon: BookOpen },
   { key: "medias", label: "Médiathèque", icon: Image },
   { key: "projets", label: "Projets & dons", icon: HandHeart },
   { key: "departements", label: "Départements", icon: Building2 },
@@ -45,7 +47,7 @@ function Page() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>("membres");
   const [detailMember, setDetailMember] = useState<Member | null>(null);
-  const { confirmDelete } = useConfirm();
+  const { confirmDelete, notifySuccess } = useConfirm();
   const members = useMembers();
 
   useEffect(() => {
@@ -98,7 +100,7 @@ function Page() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
           {tabs.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
@@ -256,14 +258,39 @@ function Page() {
             />
           )}
           {tab === "temoignages" && (
-            <CrudSection
+            <CrudSection<Testimony>
               title="Témoignages"
-              description="Témoignages des fidèles publiés sur l'accueil."
-              storageKey="ee.testimonials.v1"
+              description="Chaque témoignage écrit par un fidèle arrive ici. Il n'apparaît publiquement qu'après validation."
+              storageKey={TESTIMONIALS_KEY}
               seed={testimonials.map((t) => ({ ...t }))}
               columns={testiCols}
+              rowAction={(row, update) => (
+                <button
+                  onClick={() => {
+                    const next = row.status === "Validé" ? "En attente" : "Validé";
+                    update(row.id, { status: next });
+                    notifySuccess(
+                      next === "Validé" ? "Témoignage validé" : "Témoignage retiré",
+                      next === "Validé"
+                        ? "Il est désormais visible publiquement sur la page d'accueil."
+                        : "Il n'est plus visible publiquement et repasse en attente.",
+                    );
+                  }}
+                  aria-label={row.status === "Validé" ? "Retirer la validation" : "Valider le témoignage"}
+                  title={row.status === "Validé" ? "Retirer de l'accueil" : "Valider et publier"}
+                  className={
+                    "grid h-8 w-8 place-items-center rounded-xl transition " +
+                    (row.status === "Validé"
+                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                      : "bg-amber-100 text-amber-700 hover:bg-amber-200")
+                  }
+                >
+                  {row.status === "Validé" ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
+                </button>
+              )}
             />
           )}
+          {tab === "meditation" && <MeditationSection />}
           {tab === "medias" && (
             <CrudSection
               title="Médiathèque"
@@ -316,6 +343,7 @@ const newsCols: Column[] = [
 
 const testiCols: Column[] = [
   { key: "name", label: "Nom" },
+  { key: "status", label: "Statut", type: "select", options: testimonyStatuses },
   { key: "when", label: "Date", mono: true, hideOnMobile: true },
   { key: "likes", label: "J'aime", type: "number" },
   { key: "body", label: "Témoignage", type: "textarea", detailOnly: true },

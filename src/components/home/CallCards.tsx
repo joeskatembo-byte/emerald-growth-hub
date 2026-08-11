@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { HeartHandshake, BookOpen, CalendarClock, ArrowRight } from "lucide-react";
-import { meditation } from "@/data/mock";
+import { MEDITATION_KEY, meditations, meditation, type Meditation } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
 
 export function CallCards() {
+  const { rows } = useCollection<Meditation>(MEDITATION_KEY, meditations);
+  const current = rows.find((m) => m.active === "Oui") ?? rows[0] ?? { ...meditation, id: "m0", active: "Oui" as const };
   return (
     <section className="mx-auto mt-14 w-[min(1200px,95%)]">
       <div className="mb-6 text-center">
@@ -22,14 +25,14 @@ export function CallCards() {
         <article className="group hover-lift relative overflow-hidden rounded-3xl bg-brand-gradient p-6 text-white shadow-soft md:scale-[1.04]">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
           <div className="flex items-start justify-between gap-3">
-            <div className="font-display text-lg font-bold">{meditation.book}</div>
-            <div className="font-numeric text-sm tracking-wider text-white/90">{meditation.verse}</div>
+            <div className="font-display text-lg font-bold">{current.book}</div>
+            <div className="font-numeric text-sm tracking-wider text-white/90">{current.verse}</div>
           </div>
           <div className="mt-2 flex items-center gap-2 text-xs uppercase tracking-widest text-white/70"><BookOpen className="h-3.5 w-3.5" /> À méditer</div>
-          <p className="mt-4 text-base leading-relaxed text-white/95">{meditation.body}</p>
+          <p className="mt-4 text-base leading-relaxed text-white/95">{current.body}</p>
           <div className="mt-6 flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-white text-brand font-bold">{meditation.initial}</div>
-            <div className="text-sm">{meditation.servant}</div>
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-white text-brand font-bold">{current.initial}</div>
+            <div className="text-sm">{current.servant}</div>
           </div>
         </article>
         <article className="group glass-card hover-tilt flex h-full flex-col justify-between rounded-3xl p-6 shadow-soft md:mt-6">

@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { testimonials as initial } from "@/data/mock";
-import { Heart, Plus, ChevronRight, Check } from "lucide-react";
+import { TESTIMONIALS_KEY, testimonials as seed, type Testimony } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
+import { Heart, Plus, ChevronRight, Check, X } from "lucide-react";
 
 export function TestimonialsStack() {
-  const [items, setItems] = useState(initial);
+  const { rows, create, update } = useCollection<Testimony>(TESTIMONIALS_KEY, seed);
   const [liked, setLiked] = useState<Record<string, boolean>>({});
   const [open, setOpen] = useState(false);
+  const [offset, setOffset] = useState(0);
 
-  const rotate = () => setItems(([first, ...rest]) => [...rest, first]);
+  const published = rows.filter((t) => t.status === "Validé");
+  const items = published.length > 0 ? published.map((_, i) => published[(i + offset) % published.length]) : [];
+  const rotate = () => setOffset((o) => (published.length ? (o + 1) % published.length : 0));
   const toggleLike = (id: string) => {
+    const row = rows.find((t) => t.id === id);
+    if (!row) return;
     setLiked((s) => ({ ...s, [id]: !s[id] }));
-    setItems((arr) => arr.map((t) => (t.id === id ? { ...t, likes: t.likes + (liked[id] ? -1 : 1) } : t)));
+    update(id, { likes: row.likes + (liked[id] ? -1 : 1) });
   };
 
   return (
@@ -23,6 +29,11 @@ export function TestimonialsStack() {
         <button onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:brightness-110"><Plus className="h-4 w-4" /> Témoigner</button>
       </div>
       <div className="relative mx-auto h-[340px] max-w-xl select-none">
+        {items.length === 0 && (
+          <p className="glass-card rounded-3xl p-8 text-center text-sm text-muted-foreground shadow-soft">
+            Aucun témoignage publié pour le moment. Sois le premier à témoigner de la bonté de Dieu.
+          </p>
+        )}
         {items.slice(0, 4).map((t, i) => {
           const isTop = i === 0;
           const scale = 1 - i * 0.045;
@@ -52,12 +63,26 @@ export function TestimonialsStack() {
           );
         })}
       </div>
-      {open && <TestimonyWizard onClose={() => setOpen(false)} />}
+      {open && (
+        <TestimonyWizard
+          onClose={() => setOpen(false)}
+          onSubmit={(name, body) =>
+            create({
+              name,
+              initial: name.trim().charAt(0).toUpperCase() || "?",
+              body,
+              when: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " · " + new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+              likes: 0,
+              status: "En attente",
+            })
+          }
+        />
+      )}
     </section>
   );
 }
 
-function TestimonyWizard({ onClose }: { onClose: () => void }) {
+function TestimonyWizard({ onClose, onSubmit }: { onClose: () => void; onSubmit: (name: string, body: string) => void }) {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
@@ -65,8 +90,13 @@ function TestimonyWizard({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 grid place-items-center p-4">
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm animate-fade-in" onClick={onClose} />
       <div className="relative w-full max-w-md animate-fade-in rounded-3xl bg-background p-6 shadow-2xl">
-        <div className="mb-4 flex items-center gap-1.5">
-          {[0, 1, 2].map((i) => (<div key={i} className={"h-1.5 flex-1 rounded-full " + (i <= step ? "bg-brand" : "bg-foreground/10")} />))}
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex flex-1 items-center gap-1.5">
+            {[0, 1, 2].map((i) => (<div key={i} className={"h-1.5 flex-1 rounded-full transition-all " + (i <= step ? "bg-brand" : "bg-foreground/10")} />))}
+          </div>
+          <button onClick={onClose} aria-label="Fermer et abandonner" title="Abandonner" className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-secondary text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive">
+            <X className="h-4 w-4" />
+          </button>
         </div>
         {step === 0 && (
           <div className="animate-fade-in space-y-3">
@@ -81,7 +111,7 @@ function TestimonyWizard({ onClose }: { onClose: () => void }) {
             <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={5} placeholder="Raconte simplement ce que Dieu a fait…" className="w-full resize-none rounded-2xl border border-border bg-secondary/50 px-4 py-3 text-sm focus:border-brand focus:outline-none" />
             <div className="flex justify-between">
               <button onClick={() => setStep(0)} className="rounded-2xl bg-secondary px-4 py-2 text-sm">Retour</button>
-              <button disabled={body.trim().length < 10} onClick={() => setStep(2)} className="inline-flex items-center gap-1 rounded-2xl bg-brand-gradient px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">Valider <ChevronRight className="h-4 w-4" /></button>
+              <button disabled={body.trim().length < 10} onClick={() => { onSubmit(name.trim(), body.trim()); setStep(2); }} className="inline-flex items-center gap-1 rounded-2xl bg-brand-gradient px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">Valider <ChevronRight className="h-4 w-4" /></button>
             </div>
           </div>
         )}
@@ -89,7 +119,7 @@ function TestimonyWizard({ onClose }: { onClose: () => void }) {
           <div className="animate-fade-in space-y-3 text-center">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-7 w-7" /></div>
             <h3 className="font-display text-xl font-bold">Merci, {name || "bien-aimé(e)"} !</h3>
-            <p className="text-sm text-muted-foreground">Ton témoignage a été reçu. Il sera publié après relecture par un serviteur.</p>
+            <p className="text-sm text-muted-foreground">Ton témoignage a été reçu et transmis à l'administration. Il sera publié après validation par un serviteur.</p>
             <button onClick={onClose} className="mt-2 w-full rounded-2xl bg-brand-gradient py-2.5 text-sm font-semibold text-white">Fermer</button>
           </div>
         )}
