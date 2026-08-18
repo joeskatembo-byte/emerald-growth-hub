@@ -1,7 +1,7 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -9,7 +9,7 @@ import { CrudSection, type Column } from "@/components/admin/CrudSection";
 import { news, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
 import { projects } from "@/data/don";
-import { departments } from "@/data/about";
+import { departments, timeline, timelineHues, TIMELINE_KEY } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
 import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
 import { useConfirm } from "@/components/ui/confirm";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "messages";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "messages";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
@@ -39,6 +39,7 @@ const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "medias", label: "Médiathèque", icon: Image },
   { key: "projets", label: "Projets & dons", icon: HandHeart },
   { key: "departements", label: "Départements", icon: Building2 },
+  { key: "histoire", label: "Frise historique", icon: History },
   { key: "messages", label: "Messages", icon: MessageCircle },
 ];
 
@@ -318,6 +319,15 @@ function Page() {
               columns={deptCols}
             />
           )}
+          {tab === "histoire" && (
+            <CrudSection
+              title="Frise chronologique vivante"
+              description="Étapes affichées sur la frise interactive de la page « À propos »."
+              storageKey={TIMELINE_KEY}
+              seed={timeline.map((t) => ({ ...t }))}
+              columns={timelineCols}
+            />
+          )}
           {tab === "messages" && (
             <CrudSection
               title="Messages reçus"
@@ -372,6 +382,13 @@ const deptCols: Column[] = [
   { key: "vision", label: "Vision", type: "textarea", detailOnly: true },
   { key: "mission", label: "Mission", type: "textarea", detailOnly: true },
   { key: "schedule", label: "Horaire", detailOnly: true },
+];
+
+const timelineCols: Column[] = [
+  { key: "year", label: "Année", mono: true },
+  { key: "title", label: "Titre" },
+  { key: "hue", label: "Dégradé", type: "select", options: timelineHues, hideOnMobile: true },
+  { key: "body", label: "Récit", type: "textarea", detailOnly: true },
 ];
 
 const msgCols: Column[] = [

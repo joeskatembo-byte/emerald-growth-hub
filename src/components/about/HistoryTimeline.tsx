@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { timeline } from "@/data/about";
+import { timeline, TIMELINE_KEY, type TimelineEntry } from "@/data/about";
+import { useCollection } from "@/lib/collections";
 import { useReveal } from "@/hooks/use-reveal";
 import { History as HistoryIcon } from "lucide-react";
 
 export function HistoryTimeline() {
+  const { rows } = useCollection<TimelineEntry & { id: string }>(TIMELINE_KEY, timeline as (TimelineEntry & { id: string })[]);
+  const entries = rows.length > 0 ? rows : timeline;
   const [active, setActive] = useState<number>(0);
-  const current = timeline[active];
+  const current = entries[Math.min(active, entries.length - 1)];
+
+  if (!current) return null;
 
   return (
     <section id="histoire" className="mx-auto mt-16 w-[min(1200px,95%)] scroll-mt-24">
@@ -37,10 +42,10 @@ export function HistoryTimeline() {
       <div className="mt-6 no-scrollbar overflow-x-auto pb-2">
         <div className="relative flex min-w-max items-center gap-3 px-1">
           <div className="absolute left-0 right-0 top-6 h-px bg-border" />
-          {timeline.map((t, i) => {
+          {entries.map((t, i) => {
             const isActive = i === active;
             return (
-              <TimelineDot key={t.year} entry={t} index={i} active={isActive} onActivate={() => setActive(i)} />
+              <TimelineDot key={t.id ?? t.year} entry={t} index={i} active={isActive} onActivate={() => setActive(i)} />
             );
           })}
         </div>
@@ -49,7 +54,7 @@ export function HistoryTimeline() {
   );
 }
 
-function TimelineDot({ entry, index, active, onActivate }: { entry: typeof timeline[number]; index: number; active: boolean; onActivate: () => void }) {
+function TimelineDot({ entry, index, active, onActivate }: { entry: TimelineEntry; index: number; active: boolean; onActivate: () => void }) {
   const { ref, visible } = useReveal<HTMLButtonElement>();
   return (
     <button
