@@ -84,7 +84,7 @@ function RevealCard({ show, icon: Icon, title, hue, children }: { show: boolean;
     <div
       aria-hidden={!show}
       className={
-        "absolute inset-0 rounded-3xl bg-gradient-to-br p-8 text-white shadow-soft transition-all duration-500 sm:p-10 " +
+        "absolute inset-0 rounded-3xl bg-gradient-to-br p-8 text-white shadow-soft transition-all duration-200 sm:p-10 " +
         hue +
         " " +
         (show ? "opacity-100 translate-y-0 scale-100" : "pointer-events-none opacity-0 translate-y-4 scale-[0.98]")
