@@ -20,9 +20,9 @@ export function VisionMission() {
           <h2 className="mt-1 font-display text-3xl font-bold sm:text-4xl">Pourquoi existons-nous ?</h2>
 
           <div className="mt-6 grid gap-3">
-            <StepDot n={0} label="Notre raison d'être" active={visibleStep === 0} selected={selectedStep === 0} onHover={() => setHoveredStep(0)} onLeave={() => setHoveredStep(null)} />
-            <StepDot n={1} label="La Vision" active={visibleStep === 1} selected={selectedStep === 1} onHover={() => setHoveredStep(1)} onLeave={() => setHoveredStep(null)} />
-            <StepDot n={2} label="La Mission" active={visibleStep === 2} selected={selectedStep === 2} onHover={() => setHoveredStep(2)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={0} label="Notre raison d'être" active={visibleStep === 0} selected={selectedStep === 0} onClick={() => goToStep(0)} onHover={() => setHoveredStep(0)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={1} label="La Vision" active={visibleStep === 1} selected={selectedStep === 1} onClick={() => goToStep(1)} onHover={() => setHoveredStep(1)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={2} label="La Mission" active={visibleStep === 2} selected={selectedStep === 2} onClick={() => goToStep(2)} onHover={() => setHoveredStep(2)} onLeave={() => setHoveredStep(null)} />
           </div>
 
           <button
