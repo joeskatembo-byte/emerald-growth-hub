@@ -1,36 +1,55 @@
 export type TimelineEntry = {
+  id: string;
   year: string;
   title: string;
   body: string;
   hue: string;
 };
 
+export const TIMELINE_KEY = "ee.timeline.v1";
+
+/** Dégradés proposés dans le formulaire admin de la frise. */
+export const timelineHues = [
+  "from-emerald-600 to-emerald-900",
+  "from-amber-500 to-orange-700",
+  "from-indigo-600 to-blue-900",
+  "from-rose-500 to-pink-800",
+  "from-violet-600 to-purple-900",
+  "from-teal-600 to-emerald-900",
+  "from-sky-500 to-blue-800",
+] as const;
+
 export const timeline: TimelineEntry[] = [
   {
+    id: "t1",
     year: "1998",
     title: "La graine est semée",
     body: "Un petit groupe de prière se réunit dans un salon de Kinshasa. Douze cœurs, une seule vision : voir Jésus glorifié en RDC.",
     hue: "from-emerald-600 to-emerald-900",
   },
   {
+    id: "t2",
     year: "2003",
     title: "Premier sanctuaire",
     body: "L'assemblée franchit le cap des 300 membres. Le premier temple est inauguré à Kinshasa avec une convention nationale.",
     hue: "from-amber-500 to-orange-700",
   },
   {
+    id: "t3",
     year: "2010",
     title: "L'école biblique",
     body: "Ouverture de l'école Emmanuel — formation pastorale, diaconale et évangélisation urbaine. Plus de 400 diplômés à ce jour.",
     hue: "from-indigo-600 to-blue-900",
   },
   {
+    id: "t4",
     year: "2017",
     title: "Ministères sociaux",
     body: "Lancement des œuvres : orphelinat, dispensaire, distribution alimentaire mensuelle. La foi devient action.",
     hue: "from-rose-500 to-pink-800",
   },
   {
+    id: "t5",
     year: "2024",
     title: "Nouvelle génération",
     body: "Ouverture de trois assemblées filles en province. Diffusion numérique des cultes, podcast, application communautaire.",
