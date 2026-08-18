@@ -54,10 +54,11 @@ export function VisionMission() {
   );
 }
 
-function StepDot({ n, label, active, selected, onHover, onLeave }: { n: number; label: string; active: boolean; selected: boolean; onHover: () => void; onLeave: () => void }) {
+function StepDot({ n, label, active, selected, onClick, onHover, onLeave }: { n: number; label: string; active: boolean; selected: boolean; onClick: () => void; onHover: () => void; onLeave: () => void }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onFocus={onHover}
