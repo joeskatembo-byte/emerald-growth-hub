@@ -48,7 +48,7 @@ export function Leadership() {
       </div>
 
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
-        <DialogContent className="max-w-lg overflow-hidden rounded-3xl p-0">
+        <DialogContent hideClose className="max-w-lg overflow-hidden rounded-3xl p-0">
           {open && (
             <>
               <div className={`relative bg-gradient-to-br ${open.hue} p-6 text-white`}>
