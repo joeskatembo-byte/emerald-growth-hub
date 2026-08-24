@@ -44,6 +44,7 @@ function Page() {
   const [form, setForm] = useState<Record<string, string | number> | null>(null);
   const [saved, setSaved] = useState(false);
   const [editing, setEditing] = useState(false);
+  const { quartiers } = useQuartiers(String(form?.commune ?? ""));
 
   useEffect(() => {
     if (ready && !user) navigate({ to: "/inscription" });
