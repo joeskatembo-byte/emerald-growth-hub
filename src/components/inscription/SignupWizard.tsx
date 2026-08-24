@@ -33,11 +33,24 @@ export function SignupWizard() {
   });
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
+  const { quartiers, add: addQuartierToList } = useQuartiers(f.commune);
+  const [newQuartier, setNewQuartier] = useState("");
+  const [addingQuartier, setAddingQuartier] = useState(false);
+
+  const confirmQuartier = () => {
+    const q = newQuartier.trim();
+    if (q.length < 2) return;
+    addQuartierToList(q);
+    set("quartier", q);
+    setNewQuartier("");
+    setAddingQuartier(false);
+  };
+
   const valid = useMemo(() => {
     const phoneOk = (v: string) => /^[+0-9 ()-]{8,20}$/.test(v.trim());
     return [
       f.nom.trim().length > 1 && f.prenom.trim().length > 1,
-      f.commune !== "" && f.avenue.trim().length > 1 && f.parcelle.trim().length > 0,
+      f.commune !== "" && f.quartier !== "" && f.avenue.trim().length > 1 && f.parcelle.trim().length > 0,
       f.etatCivil !== "" && phoneOk(f.telephone) && phoneOk(f.urgence) &&
         (f.etatCivil !== "Marié(e)" || f.enfants >= 0),
       f.naissance !== "" && f.departement !== "" && f.password.length >= 4,
