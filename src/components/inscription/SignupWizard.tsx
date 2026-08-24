@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { communes, etatsCivils, departmentNames } from "@/data/inscription";
 import { signup } from "@/lib/session";
+import { useQuartiers } from "@/lib/quartiers";
 
 const steps = [
   { label: "Identité", Icon: UserPlus },
@@ -26,7 +27,7 @@ export function SignupWizard() {
   const [show, setShow] = useState(false);
 
   const [f, setF] = useState({
-    nom: "", prenom: "", commune: "", avenue: "", parcelle: "",
+    nom: "", prenom: "", commune: "", quartier: "", avenue: "", parcelle: "",
     etatCivil: "", enfants: 0, telephone: "", urgence: "",
     photo: null as string | null, naissance: "", departement: "", password: "",
   });
