@@ -7,6 +7,7 @@ export type Member = {
   nom: string;
   prenom: string;
   commune: string;
+  quartier: string;
   avenue: string;
   parcelle: string;
   etatCivil: string;
