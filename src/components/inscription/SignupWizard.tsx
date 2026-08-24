@@ -171,10 +171,66 @@ export function SignupWizard() {
                 ariaLabel="Commune"
                 placeholder="Sélectionnez votre commune…"
                 value={f.commune}
-                onChange={(v) => set("commune", v)}
+                onChange={(v) => { set("commune", v); set("quartier", ""); setAddingQuartier(false); }}
                 options={communes}
               />
             </div>
+
+            <div className="sm:col-span-2">
+              <label className="text-sm font-medium">Quartier</label>
+              {!addingQuartier ? (
+                <>
+                  <FancySelect
+                    className="mt-1"
+                    searchable
+                    ariaLabel="Quartier"
+                    placeholder={f.commune ? "Sélectionnez votre quartier…" : "Choisissez d'abord la commune"}
+                    value={f.quartier}
+                    onChange={(v) => set("quartier", v)}
+                    options={quartiers}
+                  />
+                  <button
+                    type="button"
+                    disabled={!f.commune}
+                    onClick={() => setAddingQuartier(true)}
+                    className="mt-2 text-xs font-medium text-brand transition hover:underline disabled:opacity-40"
+                  >
+                    + Mon quartier n'est pas dans la liste
+                  </button>
+                </>
+              ) : (
+                <div className="animate-fade-in mt-1 flex flex-wrap items-center gap-2">
+                  <input
+                    className={field + " flex-1 min-w-[180px]"}
+                    value={newQuartier}
+                    maxLength={40}
+                    autoFocus
+                    onChange={(e) => setNewQuartier(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); confirmQuartier(); } }}
+                    placeholder="Nom de votre quartier"
+                  />
+                  <button
+                    type="button"
+                    onClick={confirmQuartier}
+                    disabled={newQuartier.trim().length < 2}
+                    className="rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:opacity-95 disabled:opacity-40"
+                  >
+                    Ajouter
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setAddingQuartier(false); setNewQuartier(""); }}
+                    className="rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition hover:text-foreground"
+                  >
+                    Annuler
+                  </button>
+                  <p className="w-full text-xs text-muted-foreground">
+                    Il sera ajouté à la liste et proposé aux prochains fidèles de {f.commune}.
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div>
               <label className="text-sm font-medium">Avenue</label>
               <input className={field + " mt-1"} value={f.avenue} maxLength={60} onChange={(e) => set("avenue", e.target.value)} placeholder="Av. Kianza" />
