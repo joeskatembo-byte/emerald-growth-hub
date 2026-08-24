@@ -7,6 +7,7 @@ export type Member = {
   nom: string;
   prenom: string;
   commune: string;
+  quartier: string;
   avenue: string;
   parcelle: string;
   etatCivil: string;
@@ -27,19 +28,19 @@ const EVT = "ee-session-change";
 
 const seed: Member[] = [
   {
-    id: "m-admin", nom: "Emmanuel", prenom: "Pasteur", commune: "Gombe", avenue: "de la Paix",
+    id: "m-admin", nom: "Emmanuel", prenom: "Pasteur", commune: "Gombe", quartier: "Cité", avenue: "de la Paix",
     parcelle: "45", etatCivil: "Marié(e)", enfants: 3, telephone: "+243 000 000 001",
     urgence: "+243 000 000 002", photo: null, naissance: "1970-04-12", departement: "Aucun",
     password: "admin", role: "admin", createdAt: "2024-01-01",
   },
   {
-    id: "m-chef", nom: "Mbayo", prenom: "Josué", commune: "Limete", avenue: "Kasaï",
+    id: "m-chef", nom: "Mbayo", prenom: "Josué", commune: "Limete", quartier: "Funa", avenue: "Kasaï",
     parcelle: "12", etatCivil: "Marié(e)", enfants: 2, telephone: "+243 000 000 003",
     urgence: "+243 000 000 004", photo: null, naissance: "1988-09-03", departement: "Jeunesse",
     password: "jeunesse", role: "chef", createdAt: "2024-02-10",
   },
   {
-    id: "m-1", nom: "Kabongo", prenom: "Marie", commune: "Lemba", avenue: "Kianza",
+    id: "m-1", nom: "Kabongo", prenom: "Marie", commune: "Lemba", quartier: "Righini", avenue: "Kianza",
     parcelle: "7", etatCivil: "Veuf/Veuve", enfants: 0, telephone: "+243 000 000 005",
     urgence: "+243 000 000 006", photo: null, naissance: "1979-11-21", departement: "Femmes",
     password: "marie", role: "membre", createdAt: "2025-03-04",

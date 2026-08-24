@@ -8,6 +8,7 @@ import {
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { communes, etatsCivils, departmentNames } from "@/data/inscription";
+import { useQuartiers } from "@/lib/quartiers";
 import { departments } from "@/data/about";
 import { useSession, updateMember, logout } from "@/lib/session";
 
@@ -44,6 +45,7 @@ function Page() {
   const [form, setForm] = useState<Record<string, string | number> | null>(null);
   const [saved, setSaved] = useState(false);
   const [editing, setEditing] = useState(false);
+  const { quartiers } = useQuartiers(String(form?.commune ?? ""));
 
   useEffect(() => {
     if (ready && !user) navigate({ to: "/inscription" });
@@ -160,6 +162,7 @@ function Page() {
                 <Row label="Nom complet" value={`${user.prenom} ${user.nom}`} />
                 <Row label="Téléphone" value={<span className="font-mono">{String(form.telephone)}</span>} />
                 <Row label="Commune" value={String(form.commune)} />
+                <Row label="Quartier" value={String(form.quartier ?? "—")} />
                 <Row label="Avenue / parcelle" value={`${form.avenue} · ${form.parcelle}`} />
                 <Row label="État civil" value={String(form.etatCivil)} />
                 <Row label="Enfants" value={<span className="font-mono">{Number(form.enfants ?? 0)}</span>} />
@@ -183,6 +186,10 @@ function Page() {
                   <div>
                     <label className="text-sm font-medium">Commune</label>
                     <FancySelect className="mt-1" searchable ariaLabel="Commune" value={String(form.commune)} onChange={(v) => set("commune", v)} options={communes} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Quartier</label>
+                    <FancySelect className="mt-1" searchable ariaLabel="Quartier" value={String(form.quartier ?? "")} onChange={(v) => set("quartier", v)} options={quartiers} />
                   </div>
                   <div>
                     <label className="text-sm font-medium">État civil</label>

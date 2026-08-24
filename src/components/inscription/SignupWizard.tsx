@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { communes, etatsCivils, departmentNames } from "@/data/inscription";
 import { signup } from "@/lib/session";
+import { useQuartiers } from "@/lib/quartiers";
 
 const steps = [
   { label: "Identité", Icon: UserPlus },
@@ -26,17 +27,30 @@ export function SignupWizard() {
   const [show, setShow] = useState(false);
 
   const [f, setF] = useState({
-    nom: "", prenom: "", commune: "", avenue: "", parcelle: "",
+    nom: "", prenom: "", commune: "", quartier: "", avenue: "", parcelle: "",
     etatCivil: "", enfants: 0, telephone: "", urgence: "",
     photo: null as string | null, naissance: "", departement: "", password: "",
   });
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
+  const { quartiers, add: addQuartierToList } = useQuartiers(f.commune);
+  const [newQuartier, setNewQuartier] = useState("");
+  const [addingQuartier, setAddingQuartier] = useState(false);
+
+  const confirmQuartier = () => {
+    const q = newQuartier.trim();
+    if (q.length < 2) return;
+    addQuartierToList(q);
+    set("quartier", q);
+    setNewQuartier("");
+    setAddingQuartier(false);
+  };
+
   const valid = useMemo(() => {
     const phoneOk = (v: string) => /^[+0-9 ()-]{8,20}$/.test(v.trim());
     return [
       f.nom.trim().length > 1 && f.prenom.trim().length > 1,
-      f.commune !== "" && f.avenue.trim().length > 1 && f.parcelle.trim().length > 0,
+      f.commune !== "" && f.quartier !== "" && f.avenue.trim().length > 1 && f.parcelle.trim().length > 0,
       f.etatCivil !== "" && phoneOk(f.telephone) && phoneOk(f.urgence) &&
         (f.etatCivil !== "Marié(e)" || f.enfants >= 0),
       f.naissance !== "" && f.departement !== "" && f.password.length >= 4,
@@ -157,10 +171,66 @@ export function SignupWizard() {
                 ariaLabel="Commune"
                 placeholder="Sélectionnez votre commune…"
                 value={f.commune}
-                onChange={(v) => set("commune", v)}
+                onChange={(v) => { set("commune", v); set("quartier", ""); setAddingQuartier(false); }}
                 options={communes}
               />
             </div>
+
+            <div className="sm:col-span-2">
+              <label className="text-sm font-medium">Quartier</label>
+              {!addingQuartier ? (
+                <>
+                  <FancySelect
+                    className="mt-1"
+                    searchable
+                    ariaLabel="Quartier"
+                    placeholder={f.commune ? "Sélectionnez votre quartier…" : "Choisissez d'abord la commune"}
+                    value={f.quartier}
+                    onChange={(v) => set("quartier", v)}
+                    options={quartiers}
+                  />
+                  <button
+                    type="button"
+                    disabled={!f.commune}
+                    onClick={() => setAddingQuartier(true)}
+                    className="mt-2 text-xs font-medium text-brand transition hover:underline disabled:opacity-40"
+                  >
+                    + Mon quartier n'est pas dans la liste
+                  </button>
+                </>
+              ) : (
+                <div className="animate-fade-in mt-1 flex flex-wrap items-center gap-2">
+                  <input
+                    className={field + " flex-1 min-w-[180px]"}
+                    value={newQuartier}
+                    maxLength={40}
+                    autoFocus
+                    onChange={(e) => setNewQuartier(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); confirmQuartier(); } }}
+                    placeholder="Nom de votre quartier"
+                  />
+                  <button
+                    type="button"
+                    onClick={confirmQuartier}
+                    disabled={newQuartier.trim().length < 2}
+                    className="rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:opacity-95 disabled:opacity-40"
+                  >
+                    Ajouter
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setAddingQuartier(false); setNewQuartier(""); }}
+                    className="rounded-2xl px-3 py-2.5 text-sm text-muted-foreground transition hover:text-foreground"
+                  >
+                    Annuler
+                  </button>
+                  <p className="w-full text-xs text-muted-foreground">
+                    Il sera ajouté à la liste et proposé aux prochains fidèles de {f.commune}.
+                  </p>
+                </div>
+              )}
+            </div>
+
             <div>
               <label className="text-sm font-medium">Avenue</label>
               <input className={field + " mt-1"} value={f.avenue} maxLength={60} onChange={(e) => set("avenue", e.target.value)} placeholder="Av. Kianza" />
