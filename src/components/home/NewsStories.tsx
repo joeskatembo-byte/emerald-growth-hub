@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { news, departmentColor } from "@/data/mock";
+import { news as newsSeed, departmentColor, NEWS_KEY, type NewsItem } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 const DURATION = 5000;
 
 export function NewsStories() {
+  const { rows } = useCollection<NewsItem>(NEWS_KEY, newsSeed);
+  const news = rows.length ? rows : newsSeed;
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const [key, setKey] = useState(0);
   const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (idx > news.length - 1) setIdx(0);
+  }, [idx, news.length]);
 
   useEffect(() => {
     if (paused) return;
@@ -23,7 +30,7 @@ export function NewsStories() {
     setIdx((i) => (i + delta + news.length) % news.length);
     setKey((k) => k + 1);
   };
-  const item = news[idx];
+  const item = news[Math.min(idx, news.length - 1)];
 
   return (
     <section className="mx-auto mt-10 w-[min(1200px,95%)]">
