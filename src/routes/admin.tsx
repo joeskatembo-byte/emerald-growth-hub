@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
-import { news, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
+import { news, NEWS_KEY, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
 import { projects } from "@/data/don";
 import { departments, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent } from "@/data/about";
@@ -254,7 +254,7 @@ function Page() {
             <CrudSection
               title="Actualités"
               description="Publications affichées en stories sur la page d'accueil."
-              storageKey="ee.news.v1"
+              storageKey={NEWS_KEY}
               seed={news.map((n) => ({ ...n }))}
               columns={newsCols}
             />

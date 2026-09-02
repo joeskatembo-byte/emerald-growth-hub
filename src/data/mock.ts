@@ -19,7 +19,17 @@ export const verses = [
   { text: "Car Dieu a tant aimé le monde…", ref: "Jean 3:16" },
 ];
 
-export const news = [
+export const NEWS_KEY = "ee.news.v1";
+
+export type NewsItem = {
+  id: string;
+  kind: string;
+  dept: Department;
+  body: string;
+  when: string;
+};
+
+export const news: NewsItem[] = [
   {
     id: "1",
     kind: "Culte",
