@@ -233,9 +233,48 @@ export const weeklyProgram: ProgramSlot[] = [
   { day: "Samedi", time: "15:00", title: "Rencontre jeunesse", dept: "Jeunesse", hue: "from-amber-500 to-orange-700" },
 ];
 
-export const upcomingEvents = [
-  { date: "12 avril", title: "Retraite des femmes", where: "Kinshasa" },
-  { date: "26 avril", title: "Convention Emmanuel 2026", where: "Sanctuaire principal" },
-  { date: "30 avril", title: "Nuit d'intercession pour la nation", where: "En direct + présentiel" },
-  { date: "18 mai", title: "Baptêmes 2026", where: "Fleuve Congo" },
+export type UpcomingEvent = {
+  id: string;
+  date: string;
+  title: string;
+  where: string;
+  description: string;
+  hue: string;
+};
+
+export const EVENTS_KEY = "ee.events.v1";
+
+export const upcomingEvents: UpcomingEvent[] = [
+  {
+    id: "e1",
+    date: "12 avril",
+    title: "Retraite des femmes",
+    where: "Kinshasa",
+    description: "Trois jours de retraite spirituelle pour les femmes de l'église : enseignements, prières, partages et moments de communion autour du thème 'Debout pour sa maison'.",
+    hue: "from-rose-500 to-pink-800",
+  },
+  {
+    id: "e2",
+    date: "26 avril",
+    title: "Convention Emmanuel 2026",
+    where: "Sanctuaire principal",
+    description: "Grande convention annuelle rassemblant toutes les assemblées filles pour un week-end de louange, enseignement et célébration.",
+    hue: "from-emerald-600 to-emerald-900",
+  },
+  {
+    id: "e3",
+    date: "30 avril",
+    title: "Nuit d'intercession pour la nation",
+    where: "En direct + présentiel",
+    description: "Veillée de prière de 20h à 6h pour la paix, les autorités et les familles de la RDC. Participation en ligne et sur place.",
+    hue: "from-teal-600 to-emerald-900",
+  },
+  {
+    id: "e4",
+    date: "18 mai",
+    title: "Baptêmes 2026",
+    where: "Fleuve Congo",
+    description: "Cérémonie de baptême par immersion dans les eaux du Fleuve Congo. Inscription obligatoire auprès du département des jeunes.",
+    hue: "from-sky-500 to-blue-800",
+  },
 ];
