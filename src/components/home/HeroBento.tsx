@@ -69,14 +69,38 @@ export function HeroBento() {
           <div className="relative flex h-full flex-col justify-between">
             <div className="text-xs uppercase tracking-widest text-white/80">La communauté</div>
             <div className="font-display text-xl font-bold leading-tight sm:text-2xl">Une église, plusieurs nations.</div>
-            <div className="flex -space-x-2">
-              {["G", "J", "E", "M", "C"].map((l, i) => (
-                <div key={i} className="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold">
-                  {l}
+            <div className="group/av flex -space-x-2 pt-6">
+              {[
+                { l: "G", n: "Grâce", d: "Louange" },
+                { l: "J", n: "Josué", d: "Jeunesse" },
+                { l: "E", n: "Esther", d: "Chorale" },
+                { l: "M", n: "Marie", d: "Intercession" },
+                { l: "C", n: "Célestin", d: "Diaconat" },
+              ].map((m, i) => (
+                <div
+                  key={m.l}
+                  className="group/one relative transition-all duration-500 ease-out hover:z-30 group-hover/av:space-x-0 group-hover/av:ml-1 hover:!ml-2"
+                  style={{ transitionDelay: `${i * 40}ms` }}
+                >
+                  <span className="pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-150 group-hover/one:opacity-100" />
+                  <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-white/70 opacity-0 group-hover/one:animate-ping group-hover/one:opacity-100" />
+                  <div className="relative grid h-8 w-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold transition-all duration-500 ease-out group-hover/one:-translate-y-1.5 group-hover/one:scale-125 group-hover/one:bg-white group-hover/one:text-rose-600 group-hover/one:shadow-soft">
+                    {m.l}
+                  </div>
+                  <div className="pointer-events-none absolute -top-1 left-1/2 z-40 -translate-x-1/2 -translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
+                    <div className="text-[11px] font-bold text-foreground">{m.n}</div>
+                    <div className="text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
+                  </div>
                 </div>
               ))}
-              <div className="grid h-8 place-items-center rounded-full border-2 border-white bg-white/20 px-2 backdrop-blur text-[11px] font-bold">+1.2k</div>
+              <div className="group/one relative">
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-125 group-hover/one:opacity-100" />
+                <div className="relative grid h-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 px-2 backdrop-blur text-[11px] font-bold transition-all duration-500 group-hover/one:-translate-y-1.5 group-hover/one:scale-110 group-hover/one:bg-white group-hover/one:text-rose-600">
+                  +1.2k
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
 
