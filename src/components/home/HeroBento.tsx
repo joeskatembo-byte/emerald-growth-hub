@@ -88,10 +88,11 @@ export function HeroBento() {
                   <div className="relative grid h-8 w-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold transition-all duration-500 ease-out group-hover/one:-translate-y-1.5 group-hover/one:scale-125 group-hover/one:bg-white group-hover/one:text-rose-600 group-hover/one:shadow-soft">
                     {m.l}
                   </div>
-                  <div className="pointer-events-none absolute -top-1 left-1/2 z-40 -translate-x-1/2 -translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
-                    <div className="text-[11px] font-bold text-foreground">{m.n}</div>
-                    <div className="text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
+                  <div className="pointer-events-none absolute -bottom-1 left-1/2 z-40 max-w-[40vw] -translate-x-1/2 translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
+                    <div className="truncate text-[11px] font-bold text-foreground">{m.n}</div>
+                    <div className="truncate text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
                   </div>
+
                 </div>
               ))}
               <div className="group/one relative">
