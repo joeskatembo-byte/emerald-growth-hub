@@ -64,12 +64,13 @@ export function HeroBento() {
         </div>
 
         {/* Community photo tile */}
-        <div className="col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-emerald-700 p-5 text-white shadow-soft">
+        <div className="col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-emerald-700 p-5 pb-12 text-white shadow-soft">
           <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_20%_20%,white_0,transparent_45%),radial-gradient(circle_at_80%_70%,white_0,transparent_40%)]" />
           <div className="relative flex h-full flex-col justify-between">
             <div className="text-xs uppercase tracking-widest text-white/80">La communauté</div>
             <div className="font-display text-xl font-bold leading-tight sm:text-2xl">Une église, plusieurs nations.</div>
-            <div className="group/av flex -space-x-2 pt-6">
+            <div className="group/av flex -space-x-2 pt-5">
+
               {[
                 { l: "G", n: "Grâce", d: "Louange" },
                 { l: "J", n: "Josué", d: "Jeunesse" },
