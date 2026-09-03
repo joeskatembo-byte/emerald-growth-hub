@@ -212,7 +212,14 @@ export const departments: DeptDetail[] = [
   },
 ];
 
+export const LEADERS_KEY = "ee.leaders.v1";
+
+export const PROGRAM_KEY = "ee.program.v1";
+
+export const programDays = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"] as const;
+
 export type ProgramSlot = {
+  id: string;
   day: string;
   time: string;
   title: string;
@@ -221,16 +228,16 @@ export type ProgramSlot = {
 };
 
 export const weeklyProgram: ProgramSlot[] = [
-  { day: "Dimanche", time: "09:00", title: "Culte principal", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
-  { day: "Dimanche", time: "09:00", title: "École du dimanche", dept: "Enfants", hue: "from-sky-500 to-blue-800" },
-  { day: "Lundi", time: "18:00", title: "Cellule des cadres", dept: "Hommes", hue: "from-indigo-600 to-blue-900" },
-  { day: "Mardi", time: "15:00", title: "Étude biblique", dept: "Femmes", hue: "from-rose-500 to-pink-800" },
-  { day: "Mercredi", time: "18:00", title: "Enseignement", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
-  { day: "Jeudi", time: "19:00", title: "Chaîne d'intercession", dept: "Intercession", hue: "from-teal-600 to-emerald-900" },
-  { day: "Vendredi", time: "18:00", title: "Répétition louange", dept: "Louange", hue: "from-violet-600 to-purple-900" },
-  { day: "Vendredi", time: "19:00", title: "Adoration & délivrance", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
-  { day: "Samedi", time: "07:00", title: "Évangélisation", dept: "Hommes", hue: "from-indigo-600 to-blue-900" },
-  { day: "Samedi", time: "15:00", title: "Rencontre jeunesse", dept: "Jeunesse", hue: "from-amber-500 to-orange-700" },
+  { id: "p1", day: "Dimanche", time: "09:00", title: "Culte principal", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
+  { id: "p2", day: "Dimanche", time: "09:00", title: "École du dimanche", dept: "Enfants", hue: "from-sky-500 to-blue-800" },
+  { id: "p3", day: "Lundi", time: "18:00", title: "Cellule des cadres", dept: "Hommes", hue: "from-indigo-600 to-blue-900" },
+  { id: "p4", day: "Mardi", time: "15:00", title: "Étude biblique", dept: "Femmes", hue: "from-rose-500 to-pink-800" },
+  { id: "p5", day: "Mercredi", time: "18:00", title: "Enseignement", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
+  { id: "p6", day: "Jeudi", time: "19:00", title: "Chaîne d'intercession", dept: "Intercession", hue: "from-teal-600 to-emerald-900" },
+  { id: "p7", day: "Vendredi", time: "18:00", title: "Répétition louange", dept: "Louange", hue: "from-violet-600 to-purple-900" },
+  { id: "p8", day: "Vendredi", time: "19:00", title: "Adoration & délivrance", dept: "Église entière", hue: "from-emerald-600 to-emerald-900" },
+  { id: "p9", day: "Samedi", time: "07:00", title: "Évangélisation", dept: "Hommes", hue: "from-indigo-600 to-blue-900" },
+  { id: "p10", day: "Samedi", time: "15:00", title: "Rencontre jeunesse", dept: "Jeunesse", hue: "from-amber-500 to-orange-700" },
 ];
 
 export type UpcomingEvent = {
