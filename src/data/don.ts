@@ -79,28 +79,38 @@ export const projects: Project[] = [
   },
 ];
 
-export const donFaq = [
+export const DON_FAQ_KEY = "ee.donfaq.v1";
+
+export type DonFaqItem = { id: string; q: string; a: string };
+
+export const donFaq: DonFaqItem[] = [
   {
+    id: "df1",
     q: "Comment mon don est-il utilisé ?",
     a: "Chaque contribution est fléchée à l'avance : 60 % pour les projets, 25 % pour les œuvres sociales, 15 % pour le fonctionnement (loyer, énergie, salaires diaconaux). Un rapport public est publié chaque trimestre.",
   },
   {
+    id: "df2",
     q: "Quels moyens de paiement acceptez-vous ?",
     a: "Mobile money (M-Pesa, Airtel Money, Orange Money), virement bancaire, carte bancaire via passerelle sécurisée, et espèces en présentiel avec reçu numéroté.",
   },
   {
+    id: "df3",
     q: "Puis-je mettre en place un don mensuel automatique ?",
     a: "Oui. L'engagement mensuel est ajustable ou annulable à tout moment depuis votre espace membre. Un rappel doux vous est envoyé chaque mois avec le récapitulatif.",
   },
   {
+    id: "df4",
     q: "Comment garantissez-vous la transparence ?",
     a: "Comptabilité tenue par un expert-comptable agréé, audit externe annuel, publication du bilan sur le site, et registre des projets consultable par tout membre inscrit.",
   },
   {
+    id: "df5",
     q: "Puis-je flécher mon don vers un projet précis ?",
     a: "Absolument. Vous choisissez le projet (sanctuaire, orphelinat, dispensaire, école biblique…) et recevez des nouvelles ciblées sur son avancement.",
   },
   {
+    id: "df6",
     q: "Recevrai-je un reçu ?",
     a: "Un reçu numéroté vous est envoyé automatiquement par e-mail après chaque don, avec la mention légale requise pour vos démarches.",
   },

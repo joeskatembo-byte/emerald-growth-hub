@@ -154,10 +154,14 @@ export const media: Media[] = [
   { id: "q6", title: "Réunion des anciens", type: "Photo", date: "02 fév.", hue: "from-slate-500 to-slate-800", category: "quotidien" },
 ];
 
-export const faq = [
-  { q: "Quels sont les horaires des cultes ?", a: "Dimanche 09h00 (culte principal), mercredi 18h00 (enseignement), vendredi 19h00 (adoration & délivrance)." },
-  { q: "Comment devenir membre ?", a: "Remplissez le formulaire d'inscription, puis suivez le parcours 'Nouveaux disciples' (4 sessions). Un accompagnateur vous sera assigné." },
-  { q: "Puis-je rencontrer le pasteur ?", a: "Oui. Prenez rendez-vous depuis la page Contact — créneau confidentiel de 45 minutes." },
-  { q: "Comment soutenir l'œuvre ?", a: "Par la dîme, l'offrande, un don ponctuel ou un engagement mensuel via la page Don. Chaque contribution est tracée." },
-  { q: "Y a-t-il un programme pour les enfants ?", a: "Oui. École du dimanche 09h00, club des vainqueurs le samedi 15h. Encadrement formé et bienveillant." },
+export const FAQ_KEY = "ee.faq.v1";
+
+export type FaqItem = { id: string; q: string; a: string };
+
+export const faq: FaqItem[] = [
+  { id: "f1", q: "Quels sont les horaires des cultes ?", a: "Dimanche 09h00 (culte principal), mercredi 18h00 (enseignement), vendredi 19h00 (adoration & délivrance)." },
+  { id: "f2", q: "Comment devenir membre ?", a: "Remplissez le formulaire d'inscription, puis suivez le parcours 'Nouveaux disciples' (4 sessions). Un accompagnateur vous sera assigné." },
+  { id: "f3", q: "Puis-je rencontrer le pasteur ?", a: "Oui. Prenez rendez-vous depuis la page Contact — créneau confidentiel de 45 minutes." },
+  { id: "f4", q: "Comment soutenir l'œuvre ?", a: "Par la dîme, l'offrande, un don ponctuel ou un engagement mensuel via la page Don. Chaque contribution est tracée." },
+  { id: "f5", q: "Y a-t-il un programme pour les enfants ?", a: "Oui. École du dimanche 09h00, club des vainqueurs le samedi 15h. Encadrement formé et bienveillant." },
 ];
