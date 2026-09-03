@@ -64,12 +64,13 @@ export function HeroBento() {
         </div>
 
         {/* Community photo tile */}
-        <div className="col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-emerald-700 p-5 text-white shadow-soft">
+        <div className="col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-emerald-700 p-5 pb-12 text-white shadow-soft">
           <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_20%_20%,white_0,transparent_45%),radial-gradient(circle_at_80%_70%,white_0,transparent_40%)]" />
           <div className="relative flex h-full flex-col justify-between">
             <div className="text-xs uppercase tracking-widest text-white/80">La communauté</div>
             <div className="font-display text-xl font-bold leading-tight sm:text-2xl">Une église, plusieurs nations.</div>
-            <div className="group/av flex -space-x-2 pt-6">
+            <div className="group/av flex -space-x-2 pt-5">
+
               {[
                 { l: "G", n: "Grâce", d: "Louange" },
                 { l: "J", n: "Josué", d: "Jeunesse" },
@@ -87,10 +88,11 @@ export function HeroBento() {
                   <div className="relative grid h-8 w-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold transition-all duration-500 ease-out group-hover/one:-translate-y-1.5 group-hover/one:scale-125 group-hover/one:bg-white group-hover/one:text-rose-600 group-hover/one:shadow-soft">
                     {m.l}
                   </div>
-                  <div className="pointer-events-none absolute -top-1 left-1/2 z-40 -translate-x-1/2 -translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
-                    <div className="text-[11px] font-bold text-foreground">{m.n}</div>
-                    <div className="text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
+                  <div className="pointer-events-none absolute -bottom-1 left-1/2 z-40 max-w-[40vw] -translate-x-1/2 translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
+                    <div className="truncate text-[11px] font-bold text-foreground">{m.n}</div>
+                    <div className="truncate text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
                   </div>
+
                 </div>
               ))}
               <div className="group/one relative">
