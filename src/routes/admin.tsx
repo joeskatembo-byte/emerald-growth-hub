@@ -1,15 +1,15 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays, HelpCircle, CalendarClock, UserCog } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
-import { news, NEWS_KEY, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
+import { news, NEWS_KEY, faq, FAQ_KEY, type FaqItem, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
-import { projects } from "@/data/don";
-import { departments, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent } from "@/data/about";
+import { projects, donFaq, DON_FAQ_KEY, type DonFaqItem } from "@/data/don";
+import { departments, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent, leaders, LEADERS_KEY, type Leader, weeklyProgram, PROGRAM_KEY, programDays, type ProgramSlot } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
 import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
 import { useConfirm } from "@/components/ui/confirm";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
@@ -42,6 +42,10 @@ const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "histoire", label: "Frise historique", icon: History },
   { key: "evenements", label: "Événements", icon: CalendarDays },
   { key: "messages", label: "Messages", icon: MessageCircle },
+  { key: "faq", label: "FAQ accueil", icon: HelpCircle },
+  { key: "donfaq", label: "FAQ dons", icon: HelpCircle },
+  { key: "programme", label: "Programme", icon: CalendarClock },
+  { key: "leadership", label: "Leadership", icon: UserCog },
 ];
 
 function Page() {
@@ -102,7 +106,7 @@ function Page() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8">
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
           {tabs.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
@@ -338,6 +342,42 @@ function Page() {
               columns={eventCols}
             />
           )}
+          {tab === "faq" && (
+            <CrudSection<FaqItem>
+              title="FAQ de la page d'accueil"
+              description="Questions fréquentes affichées dans l'accordéon de la page d'accueil."
+              storageKey={FAQ_KEY}
+              seed={faq.map((f) => ({ ...f }))}
+              columns={faqCols}
+            />
+          )}
+          {tab === "donfaq" && (
+            <CrudSection<DonFaqItem>
+              title="FAQ de la page Don"
+              description="Questions affichées dans la section « Où va chaque centime ? »."
+              storageKey={DON_FAQ_KEY}
+              seed={donFaq.map((f) => ({ ...f }))}
+              columns={faqCols}
+            />
+          )}
+          {tab === "programme" && (
+            <CrudSection<ProgramSlot>
+              title="Programme hebdomadaire"
+              description="Créneaux Dimanche → Samedi affichés sur la page « À propos »."
+              storageKey={PROGRAM_KEY}
+              seed={weeklyProgram.map((p) => ({ ...p }))}
+              columns={programCols}
+            />
+          )}
+          {tab === "leadership" && (
+            <CrudSection<Leader>
+              title="Leadership"
+              description="Pasteurs, diacres et responsables affichés sur la page « À propos »."
+              storageKey={LEADERS_KEY}
+              seed={leaders.map((l) => ({ ...l }))}
+              columns={leaderCols}
+            />
+          )}
           {tab === "messages" && (
             <CrudSection
               title="Messages reçus"
@@ -415,6 +455,28 @@ const eventCols: Column[] = [
   { key: "where", label: "Lieu" },
   { key: "hue", label: "Dégradé", type: "select", options: timelineHues, hideOnMobile: true },
   { key: "description", label: "Description", type: "textarea", detailOnly: true },
+];
+
+const faqCols: Column[] = [
+  { key: "q", label: "Question" },
+  { key: "a", label: "Réponse", type: "textarea", detailOnly: true },
+];
+
+const programCols: Column[] = [
+  { key: "day", label: "Jour", type: "select", options: [...programDays] },
+  { key: "time", label: "Heure", mono: true },
+  { key: "title", label: "Activité" },
+  { key: "dept", label: "Département", hideOnMobile: true },
+  { key: "hue", label: "Dégradé", type: "select", options: timelineHues, hideOnMobile: true },
+];
+
+const leaderCols: Column[] = [
+  { key: "name", label: "Nom" },
+  { key: "role", label: "Fonction" },
+  { key: "initial", label: "Initiale", hideOnMobile: true },
+  { key: "hue", label: "Dégradé", type: "select", options: timelineHues, hideOnMobile: true },
+  { key: "quote", label: "Citation", type: "textarea", detailOnly: true },
+  { key: "bio", label: "Biographie", type: "textarea", detailOnly: true },
 ];
 
 const seedMessages = [
