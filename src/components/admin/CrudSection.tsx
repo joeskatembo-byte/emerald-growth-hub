@@ -1,6 +1,6 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useState } from "react";
-import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Check, RotateCcw, Search, GripVertical } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useCollection, type Row } from "@/lib/collections";
 import { useConfirm } from "@/components/ui/confirm";
@@ -20,7 +20,7 @@ const field =
   "w-full rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
 
 export function CrudSection<T extends Row>({
-  title, description, storageKey, seed, columns, rowAction,
+  title, description, storageKey, seed, columns, rowAction, reorderable,
 }: {
   title: string;
   description: string;
@@ -29,8 +29,12 @@ export function CrudSection<T extends Row>({
   columns: Column[];
   /** Action supplémentaire par ligne (ex. validation d'un témoignage). */
   rowAction?: (row: T, update: (id: string, patch: Partial<T>) => void) => React.ReactNode;
+  /** Active le glisser-déposer pour contrôler l'ordre d'affichage public. */
+  reorderable?: boolean;
 }) {
-  const { rows, create, update, remove, reset } = useCollection<T>(storageKey, seed);
+  const { rows, create, update, remove, reset, reorder } = useCollection<T>(storageKey, seed);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
   const { confirmDelete } = useConfirm();
   const [editing, setEditing] = useState<string | "new" | null>(null);
   const [draft, setDraft] = useState<Record<string, unknown>>({});
@@ -53,6 +57,7 @@ export function CrudSection<T extends Row>({
   const filtered = rows.filter((r) =>
     q.trim() === "" || JSON.stringify(r).toLowerCase().includes(q.toLowerCase()),
   );
+  const canDrag = Boolean(reorderable) && q.trim() === "";
 
   return (
     <div className="animate-fade-in glass-card rounded-3xl p-5 shadow-soft sm:p-6">
@@ -119,6 +124,7 @@ export function CrudSection<T extends Row>({
         <table className="w-full table-fixed border-separate border-spacing-y-2 text-sm">
           <thead>
             <tr className="text-left text-xs uppercase tracking-widest text-muted-foreground">
+              {canDrag && <th className="w-9 px-2 pb-1" aria-label="Ordre" />}
               {tableColumns.map((c) => (
                 <th key={c.key} className={"px-3 pb-1 font-medium " + (c.hideOnMobile ? "hidden md:table-cell" : "")}>{c.label}</th>
               ))}
@@ -130,14 +136,33 @@ export function CrudSection<T extends Row>({
               <tr
                 key={r.id}
                 onClick={() => detailColumns.length > 0 && setDetail(r)}
-                className={"bg-card transition duration-300 hover:bg-brand-soft/60 " + (detailColumns.length > 0 ? "cursor-pointer" : "")}
+                onDragOver={canDrag ? (e) => { e.preventDefault(); setOverId(r.id); } : undefined}
+                onDrop={canDrag ? (e) => { e.preventDefault(); if (dragId) reorder(dragId, r.id); setDragId(null); setOverId(null); } : undefined}
+                className={
+                  "bg-card transition duration-300 hover:bg-brand-soft/60 " +
+                  (detailColumns.length > 0 ? "cursor-pointer " : "") +
+                  (canDrag && dragId === r.id ? "opacity-40 " : "") +
+                  (canDrag && overId === r.id && dragId !== r.id ? "ring-2 ring-brand/40 " : "")
+                }
               >
+                {canDrag && (
+                  <td
+                    draggable
+                    onDragStart={(e) => { e.stopPropagation(); setDragId(r.id); }}
+                    onDragEnd={() => { setDragId(null); setOverId(null); }}
+                    onClick={(e) => e.stopPropagation()}
+                    title="Glisser pour réordonner"
+                    className="w-9 cursor-grab rounded-l-2xl px-2 py-3 text-muted-foreground active:cursor-grabbing"
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </td>
+                )}
                 {tableColumns.map((c, i) => (
                   <td
                     key={c.key}
                     className={
                       "truncate px-3 py-3 " +
-                      (i === 0 ? "rounded-l-2xl font-medium" : "") +
+                      (i === 0 ? (canDrag ? "font-medium" : "rounded-l-2xl font-medium") : "") +
                       (c.mono || c.type === "number" ? " font-mono text-xs" : "") +
                       (c.hideOnMobile ? " hidden md:table-cell" : "")
                     }
@@ -172,7 +197,7 @@ export function CrudSection<T extends Row>({
               </tr>
             ))}
             {filtered.length === 0 && (
-              <tr><td colSpan={tableColumns.length + 1} className="rounded-2xl bg-card px-3 py-8 text-center text-muted-foreground">Aucun enregistrement.</td></tr>
+              <tr><td colSpan={tableColumns.length + (canDrag ? 2 : 1)} className="rounded-2xl bg-card px-3 py-8 text-center text-muted-foreground">Aucun enregistrement.</td></tr>
             )}
           </tbody>
         </table>

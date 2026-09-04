@@ -53,5 +53,17 @@ export function useCollection<T extends Row>(key: string, seed: T[]) {
 
   const reset = useCallback(() => commit(seed), [commit, seed]);
 
-  return { rows, create, update, remove, reset };
+  /** Déplace un élément (glisser-déposer) : réordonne l'affichage public. */
+  const reorder = useCallback((fromId: string, toId: string) => {
+    if (fromId === toId) return;
+    const list = [...read<T>(key, seed)];
+    const from = list.findIndex((r) => r.id === fromId);
+    const to = list.findIndex((r) => r.id === toId);
+    if (from < 0 || to < 0) return;
+    const [moved] = list.splice(from, 1);
+    list.splice(to, 0, moved);
+    commit(list);
+  }, [commit, key, seed]);
+
+  return { rows, create, update, remove, reset, reorder };
 }
