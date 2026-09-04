@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { leaders, type Leader } from "@/data/about";
+import { leaders, LEADERS_KEY, type Leader } from "@/data/about";
+import { useCollection } from "@/lib/collections";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Quote, X } from "lucide-react";
 
 export function Leadership() {
   const [open, setOpen] = useState<Leader | null>(null);
+  const { rows: people } = useCollection<Leader>(LEADERS_KEY, leaders);
 
   return (
     <section id="leadership" className="mx-auto mt-16 w-[min(1200px,95%)] scroll-mt-24">
@@ -15,7 +17,7 @@ export function Leadership() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {leaders.map((l) => (
+        {people.map((l) => (
           <button
             key={l.id}
             onClick={() => setOpen(l)}

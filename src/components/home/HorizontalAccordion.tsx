@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { faq } from "@/data/mock";
+import { faq, FAQ_KEY, type FaqItem } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
 import { Plus } from "lucide-react";
 
 export function HorizontalAccordion() {
   const [open, setOpen] = useState<number | null>(0);
+  const { rows: items } = useCollection<FaqItem>(FAQ_KEY, faq);
   return (
     <section className="mx-auto mt-16 w-[min(1200px,95%)]">
       <div className="mb-6">
@@ -11,10 +13,10 @@ export function HorizontalAccordion() {
         <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">Vous vous demandez peut-être…</h2>
       </div>
       <div className="space-y-3">
-        {faq.map((item, i) => {
+        {items.map((item, i) => {
           const isOpen = open === i;
           return (
-            <div key={i} className="glass-card overflow-hidden rounded-3xl">
+            <div key={item.id ?? i} className="glass-card overflow-hidden rounded-3xl">
               <button
                 onClick={() => setOpen(isOpen ? null : i)}
                 className="flex w-full items-center gap-4 p-5 text-left"
