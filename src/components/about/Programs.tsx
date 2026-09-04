@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { weeklyProgram, upcomingEvents, EVENTS_KEY, type UpcomingEvent } from "@/data/about";
+import { weeklyProgram, PROGRAM_KEY, type ProgramSlot, upcomingEvents, EVENTS_KEY, type UpcomingEvent } from "@/data/about";
 import { useCollection } from "@/lib/collections";
 import { CalendarDays, Clock, Sparkles, X } from "lucide-react";
 
@@ -15,12 +15,13 @@ export function Programs() {
   const [selected, setSelected] = useState<number>(getTodayIndex());
   const [selectedEvent, setSelectedEvent] = useState<UpcomingEvent | null>(null);
   const { rows: events } = useCollection<UpcomingEvent>(EVENTS_KEY, upcomingEvents);
+  const { rows: program } = useCollection<ProgramSlot>(PROGRAM_KEY, weeklyProgram);
   const grouped = useMemo(() => {
-    const map = new Map<string, typeof weeklyProgram>();
+    const map = new Map<string, ProgramSlot[]>();
     for (const d of days) map.set(d, []);
-    for (const p of weeklyProgram) map.get(p.day)?.push(p);
+    for (const p of program) map.get(p.day)?.push(p);
     return map;
-  }, []);
+  }, [program]);
   const dayName = days[selected];
   const slots = grouped.get(dayName) ?? [];
 
