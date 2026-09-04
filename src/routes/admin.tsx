@@ -349,8 +349,8 @@ function Page() {
               storageKey={FAQ_KEY}
               seed={faq.map((f) => ({ ...f }))}
               columns={faqCols}
-            reorderable
-              />
+              reorderable
+            />
           )}
           {tab === "donfaq" && (
             <CrudSection<DonFaqItem>
@@ -359,8 +359,8 @@ function Page() {
               storageKey={DON_FAQ_KEY}
               seed={donFaq.map((f) => ({ ...f }))}
               columns={faqCols}
-            reorderable
-              />
+              reorderable
+            />
           )}
           {tab === "programme" && (
             <CrudSection<ProgramSlot>
@@ -369,8 +369,8 @@ function Page() {
               storageKey={PROGRAM_KEY}
               seed={weeklyProgram.map((p) => ({ ...p }))}
               columns={programCols}
-            reorderable
-              />
+              reorderable
+            />
           )}
           {tab === "leadership" && (
             <CrudSection<Leader>
@@ -379,8 +379,8 @@ function Page() {
               storageKey={LEADERS_KEY}
               seed={leaders.map((l) => ({ ...l }))}
               columns={leaderCols}
-            reorderable
-              />
+              reorderable
+            />
           )}
           {tab === "messages" && (
             <CrudSection
