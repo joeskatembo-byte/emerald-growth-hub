@@ -345,38 +345,42 @@ function Page() {
           {tab === "faq" && (
             <CrudSection<FaqItem>
               title="FAQ de la page d'accueil"
-              description="Questions fréquentes affichées dans l'accordéon de la page d'accueil."
+              description="Questions fréquentes affichées dans l'accordéon de la page d'accueil. Glissez la poignée pour changer l'ordre."
               storageKey={FAQ_KEY}
               seed={faq.map((f) => ({ ...f }))}
               columns={faqCols}
-            />
+            reorderable
+              />
           )}
           {tab === "donfaq" && (
             <CrudSection<DonFaqItem>
               title="FAQ de la page Don"
-              description="Questions affichées dans la section « Où va chaque centime ? »."
+              description="Questions affichées dans la section « Où va chaque centime ? ». Glissez la poignée pour changer l'ordre."
               storageKey={DON_FAQ_KEY}
               seed={donFaq.map((f) => ({ ...f }))}
               columns={faqCols}
-            />
+            reorderable
+              />
           )}
           {tab === "programme" && (
             <CrudSection<ProgramSlot>
               title="Programme hebdomadaire"
-              description="Créneaux Dimanche → Samedi affichés sur la page « À propos »."
+              description="Créneaux Dimanche → Samedi affichés sur la page « À propos ». Glissez la poignée pour changer l'ordre."
               storageKey={PROGRAM_KEY}
               seed={weeklyProgram.map((p) => ({ ...p }))}
               columns={programCols}
-            />
+            reorderable
+              />
           )}
           {tab === "leadership" && (
             <CrudSection<Leader>
               title="Leadership"
-              description="Pasteurs, diacres et responsables affichés sur la page « À propos »."
+              description="Pasteurs, diacres et responsables affichés sur la page « À propos ». Glissez la poignée pour changer l'ordre."
               storageKey={LEADERS_KEY}
               seed={leaders.map((l) => ({ ...l }))}
               columns={leaderCols}
-            />
+            reorderable
+              />
           )}
           {tab === "messages" && (
             <CrudSection
