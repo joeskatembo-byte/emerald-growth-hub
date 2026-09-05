@@ -67,3 +67,41 @@ export function useCollection<T extends Row>(key: string, seed: T[]) {
 
   return { rows, create, update, remove, reset, reorder };
 }
+/** Réglages uniques (objet unique persisté), ex. le pied de page. */
+export function useSettings<T extends Record<string, unknown>>(key: string, seed: T) {
+  const [value, setValue] = useState<T>(seed);
+
+  useEffect(() => {
+    const sync = () => {
+      if (typeof window === "undefined") return;
+      try {
+        const raw = localStorage.getItem(key);
+        setValue(raw ? { ...seed, ...(JSON.parse(raw) as T) } : seed);
+      } catch {
+        setValue(seed);
+      }
+    };
+    sync();
+    window.addEventListener(EVT, sync);
+    return () => window.removeEventListener(EVT, sync);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const save = useCallback(
+    (next: T) => {
+      localStorage.setItem(key, JSON.stringify(next));
+      setValue(next);
+      window.dispatchEvent(new Event(EVT));
+    },
+    [key],
+  );
+
+  const reset = useCallback(() => {
+    localStorage.removeItem(key);
+    setValue(seed);
+    window.dispatchEvent(new Event(EVT));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  return { value, save, reset };
+}
