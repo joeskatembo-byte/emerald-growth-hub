@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
-import { projects, type Project } from "@/data/don";
+import { projects, PROJECTS_KEY, type Project } from "@/data/don";
+import { useCollection } from "@/lib/collections";
 import { Sparkles, CheckCircle2 } from "lucide-react";
 
 const fmt = (n: number) => new Intl.NumberFormat("fr-FR").format(n) + " $";
 
 export function ProjectsStack() {
   const [tab, setTab] = useState<"en-cours" | "termine">("en-cours");
-  const list = useMemo(() => projects.filter((p) => p.status === tab), [tab]);
+  const { rows } = useCollection<Project>(PROJECTS_KEY, projects);
+  const list = useMemo(() => rows.filter((p) => p.status === tab), [tab, rows]);
   const [order, setOrder] = useState(0);
-  const items = list.map((_, i) => list[(i + order) % list.length]);
+  const items = list.length ? list.map((_, i) => list[(i + order) % list.length]) : [];
   const rotate = () => setOrder((o) => (o + 1) % Math.max(1, list.length));
 
   return (

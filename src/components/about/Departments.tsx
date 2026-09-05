@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { departments } from "@/data/about";
+import { departments, DEPARTMENTS_KEY, type DeptDetail } from "@/data/about";
+import { useCollection } from "@/lib/collections";
 import { Clock, User, Mail, CalendarClock, ChevronRight } from "lucide-react";
 
 export function Departments() {
-  const [active, setActive] = useState(departments[0].key);
-  const current = departments.find((d) => d.key === active) ?? departments[0];
+  const { rows } = useCollection<DeptDetail & { id: string }>(
+    DEPARTMENTS_KEY,
+    departments.map((d) => ({ ...d, id: d.key })),
+  );
+  const [active, setActive] = useState<string | null>(null);
+  const current = rows.find((d) => d.id === active) ?? rows[0];
 
   return (
     <section id="departements" className="mx-auto mt-16 w-[min(1200px,95%)] scroll-mt-24">
@@ -17,12 +22,12 @@ export function Departments() {
       <div className="grid gap-4 md:grid-cols-[280px_1fr]">
         {/* Tabs */}
         <div className="grid grid-cols-3 gap-2 md:grid-cols-1">
-          {departments.map((d) => {
-            const isActive = d.key === active;
+          {rows.map((d) => {
+            const isActive = d.id === current?.id;
             return (
               <button
-                key={d.key}
-                onClick={() => setActive(d.key)}
+                key={d.id}
+                onClick={() => setActive(d.id)}
                 className={
                   "group flex items-center gap-3 rounded-2xl border p-3 text-left transition " +
                   (isActive
@@ -44,7 +49,7 @@ export function Departments() {
         </div>
 
         {/* Detail */}
-        <div key={current.key} className="animate-fade-in glass-card rounded-3xl p-6 shadow-soft sm:p-8">
+        <div key={current?.id} className="animate-fade-in glass-card rounded-3xl p-6 shadow-soft sm:p-8">
           <div className="flex flex-wrap items-start gap-4">
             <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${current.hue} text-2xl text-white shadow-soft`}>
               <span aria-hidden>{current.icon}</span>
