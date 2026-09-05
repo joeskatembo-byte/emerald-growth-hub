@@ -10,6 +10,8 @@ export type Project = {
   since: string;
 };
 
+export const PROJECTS_KEY = "ee.projects.v1";
+
 export const projects: Project[] = [
   {
     id: "p1",

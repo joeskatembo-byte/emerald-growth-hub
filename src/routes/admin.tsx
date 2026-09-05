@@ -6,10 +6,10 @@ import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
-import { news, NEWS_KEY, faq, FAQ_KEY, type FaqItem, testimonials, media, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
+import { news, NEWS_KEY, faq, FAQ_KEY, type FaqItem, testimonials, media, MEDIA_KEY, verses, VERSES_KEY, type Verse, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
-import { projects, donFaq, DON_FAQ_KEY, type DonFaqItem } from "@/data/don";
-import { departments, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent, leaders, LEADERS_KEY, type Leader, weeklyProgram, PROGRAM_KEY, programDays, type ProgramSlot } from "@/data/about";
+import { projects, PROJECTS_KEY, donFaq, DON_FAQ_KEY, type DonFaqItem } from "@/data/don";
+import { departments, DEPARTMENTS_KEY, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent, leaders, LEADERS_KEY, type Leader, weeklyProgram, PROGRAM_KEY, programDays, type ProgramSlot } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
 import { useSession, useMembers, removeMember, updateMember, logout, type Member } from "@/lib/session";
 import { useConfirm } from "@/components/ui/confirm";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership" | "versets";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
@@ -46,6 +46,7 @@ const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "donfaq", label: "FAQ dons", icon: HelpCircle },
   { key: "programme", label: "Programme", icon: CalendarClock },
   { key: "leadership", label: "Leadership", icon: UserCog },
+  { key: "versets", label: "Versets", icon: Quote },
 ];
 
 function Page() {
@@ -301,27 +302,30 @@ function Page() {
             <CrudSection
               title="Médiathèque"
               description="Photos, affiches, vidéos et podcasts."
-              storageKey="ee.media.v1"
+              storageKey={MEDIA_KEY}
               seed={media.map((m) => ({ ...m }))}
               columns={mediaCols}
+              reorderable
             />
           )}
           {tab === "projets" && (
             <CrudSection
               title="Projets & dons"
               description="Budgets, montants récoltés et statut des projets."
-              storageKey="ee.projects.v1"
+              storageKey={PROJECTS_KEY}
               seed={projects.map((p) => ({ ...p }))}
               columns={projectCols}
+              reorderable
             />
           )}
           {tab === "departements" && (
             <CrudSection
               title="Départements"
               description="Vision, mission, dirigeants et horaires."
-              storageKey="ee.departments.v1"
+              storageKey={DEPARTMENTS_KEY}
               seed={departments.map((d) => ({ ...d, id: d.key }))}
               columns={deptCols}
+              reorderable
             />
           )}
           {tab === "histoire" && (
@@ -382,6 +386,16 @@ function Page() {
               reorderable
             />
           )}
+          {tab === "versets" && (
+            <CrudSection<Verse>
+              title="Versets & accroches"
+              description="Phrases défilantes de la carte « Parole du jour » sur la page d'accueil. Glissez la poignée pour changer l'ordre."
+              storageKey={VERSES_KEY}
+              seed={verses.map((v) => ({ ...v }))}
+              columns={verseCols}
+              reorderable
+            />
+          )}
           {tab === "messages" && (
             <CrudSection
               title="Messages reçus"
@@ -436,6 +450,11 @@ const deptCols: Column[] = [
   { key: "vision", label: "Vision", type: "textarea", detailOnly: true },
   { key: "mission", label: "Mission", type: "textarea", detailOnly: true },
   { key: "schedule", label: "Horaire", detailOnly: true },
+];
+
+const verseCols: Column[] = [
+  { key: "text", label: "Texte", type: "textarea" },
+  { key: "ref", label: "Référence", mono: true },
 ];
 
 const timelineCols: Column[] = [

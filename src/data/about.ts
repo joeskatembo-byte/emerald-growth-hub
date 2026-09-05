@@ -137,6 +137,8 @@ export type DeptDetail = {
   next: string;
 };
 
+export const DEPARTMENTS_KEY = "ee.departments.v1";
+
 export const departments: DeptDetail[] = [
   {
     key: "jeunesse",

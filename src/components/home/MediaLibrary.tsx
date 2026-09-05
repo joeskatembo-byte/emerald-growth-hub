@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { media, type Media } from "@/data/mock";
+import { media, MEDIA_KEY, type Media } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
 import { Play, Image as ImageIcon, Mic, FileImage, Heart, Share2, Download, X } from "lucide-react";
 
 const iconFor: Record<Media["type"], typeof Play> = {
@@ -16,9 +17,10 @@ const tabs: { id: Tab; label: string }[] = [
 export function MediaLibrary() {
   const [selected, setSelected] = useState<Media | null>(null);
   const [tab, setTab] = useState<Tab>("tout");
+  const { rows } = useCollection<Media & { id: string }>(MEDIA_KEY, media);
   const items = useMemo(
-    () => (tab === "tout" ? media : media.filter((m) => m.category === tab)),
-    [tab]
+    () => (tab === "tout" ? rows : rows.filter((m) => m.category === tab)),
+    [tab, rows]
   );
   return (
     <section className="mt-16">

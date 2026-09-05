@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { verses } from "@/data/mock";
+import { verses, VERSES_KEY, type Verse } from "@/data/mock";
+import { useCollection } from "@/lib/collections";
 import { ArrowRight, Users, CalendarClock, Sparkles, Quote } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { TypedVerse } from "@/components/ui/typed-verse";
 
 export function HeroBento() {
+  const { rows: verseRows } = useCollection<Verse>(VERSES_KEY, verses);
+  const items = verseRows.length ? verseRows : verses;
   const [verseIdx, setVerseIdx] = useState(0);
   const [count, setCount] = useState(0);
   const target = 1247;
@@ -32,14 +35,14 @@ export function HeroBento() {
           </div>
           <div className="min-h-[120px]">
             <TypedVerse
-              items={verses}
+              items={items}
               onIndexChange={handleIndexChange}
               className="font-display text-2xl font-bold leading-tight sm:text-4xl"
               refClassName="mt-2 font-numeric text-xs tracking-wider text-white/70"
             />
           </div>
           <div className="flex items-center gap-1.5">
-            {verses.map((_, i) => (
+            {items.map((_, i) => (
               <span key={i} className={"h-1 rounded-full transition-all " + (i === verseIdx ? "w-8 bg-white" : "w-3 bg-white/30")} />
             ))}
           </div>

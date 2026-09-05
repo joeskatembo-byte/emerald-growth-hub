@@ -11,12 +11,16 @@ export const departmentColor: Record<Department, string> = {
   Intercession: "from-emerald-500 to-teal-700",
 };
 
-export const verses = [
-  { text: "Bienvenue à la maison.", ref: "" },
-  { text: "La foi en action.", ref: "" },
-  { text: "Une église, plusieurs nations.", ref: "" },
-  { text: "L'Éternel est mon berger, je ne manquerai de rien.", ref: "Psaume 23:1" },
-  { text: "Car Dieu a tant aimé le monde…", ref: "Jean 3:16" },
+export const VERSES_KEY = "ee.verses.v1";
+
+export type Verse = { id: string; text: string; ref: string };
+
+export const verses: Verse[] = [
+  { id: "v1", text: "Bienvenue à la maison.", ref: "" },
+  { id: "v2", text: "La foi en action.", ref: "" },
+  { id: "v3", text: "Une église, plusieurs nations.", ref: "" },
+  { id: "v4", text: "L'Éternel est mon berger, je ne manquerai de rien.", ref: "Psaume 23:1" },
+  { id: "v5", text: "Car Dieu a tant aimé le monde…", ref: "Jean 3:16" },
 ];
 
 export const NEWS_KEY = "ee.news.v1";
@@ -129,6 +133,8 @@ export const meditations: Meditation[] = [
     active: "Non",
   },
 ];
+
+export const MEDIA_KEY = "ee.media.v1";
 
 export type Media = {
   id: string;
