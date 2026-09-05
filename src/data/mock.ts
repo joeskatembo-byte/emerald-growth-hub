@@ -134,6 +134,8 @@ export const meditations: Meditation[] = [
   },
 ];
 
+export const MEDIA_KEY = "ee.media.v1";
+
 export type Media = {
   id: string;
   title: string;
