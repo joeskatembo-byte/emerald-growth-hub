@@ -126,9 +126,13 @@ export function HeroBento() {
             <Quote className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <p className="text-sm italic text-foreground/80">« Dieu ne cherche pas des géants, mais des cœurs disponibles. »</p>
-            <div className="mt-1 text-xs text-muted-foreground">Pasteur Emmanuel</div>
+            <TypedVerse
+              items={[{ text: "Dieu ne cherche pas des géants, mais des cœurs disponibles.", ref: "Pasteur Emmanuel" }]}
+              className="text-sm italic text-foreground/80"
+              refClassName="mt-1 text-xs text-muted-foreground"
+            />
           </div>
+
         </div>
       </div>
     </section>
