@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { projects, PROJECTS_KEY, type Project } from "@/data/don";
 import { useCollection } from "@/lib/collections";
-import { Sparkles, CheckCircle2 } from "lucide-react";
+import { Sparkles, CheckCircle2, MapPin, UserRound, X, ArrowRight } from "lucide-react";
 
 const fmt = (n: number) => new Intl.NumberFormat("fr-FR").format(n) + " $";
 
@@ -10,6 +11,7 @@ export function ProjectsStack() {
   const { rows } = useCollection<Project>(PROJECTS_KEY, projects);
   const list = useMemo(() => rows.filter((p) => p.status === tab), [tab, rows]);
   const [order, setOrder] = useState(0);
+  const [selected, setSelected] = useState<Project | null>(null);
   const items = list.length ? list.map((_, i) => list[(i + order) % list.length]) : [];
   const rotate = () => setOrder((o) => (o + 1) % Math.max(1, list.length));
 
@@ -52,16 +54,77 @@ export function ProjectsStack() {
               p={p}
               isTop={isTop}
               onNext={rotate}
+              onOpen={() => setSelected(p)}
               style={{ transform: `translateY(${y}px) scale(${scale}) rotate(${rot}deg)`, zIndex: 10 - i, opacity: 1 - i * 0.12 }}
             />
           );
         })}
       </div>
+
+      {selected && typeof document !== "undefined" &&
+        createPortal(
+          <div className="fixed inset-0 z-[9998] grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm" onClick={() => setSelected(null)}>
+            <div
+              role="dialog"
+              aria-modal="true"
+              onClick={(e) => e.stopPropagation()}
+              className="animate-fade-in no-scrollbar max-h-[85vh] w-[min(560px,100%)] overflow-y-auto rounded-3xl bg-card shadow-soft"
+            >
+              <div className={"relative h-32 w-full bg-gradient-to-br " + selected.hue}>
+                <div className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-foreground backdrop-blur">
+                  {selected.status === "en-cours" ? "En cours" : "Terminé"}
+                </div>
+                <button onClick={() => setSelected(null)} aria-label="Fermer" className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-2xl bg-white/25 text-white backdrop-blur transition hover:bg-white/40">
+                  <X className="h-4 w-4" />
+                </button>
+                <div className="absolute -bottom-6 left-5 grid h-14 w-14 place-items-center rounded-2xl bg-card text-2xl shadow-soft">{selected.icon}</div>
+              </div>
+              <div className="p-6 pt-9">
+                <p className="font-numeric text-xs text-muted-foreground">{selected.since}</p>
+                <h3 className="mt-1 font-display text-xl font-bold text-foreground">{selected.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{selected.description}</p>
+
+                {(selected.where || selected.responsible) && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {selected.where && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+                        <MapPin className="h-3.5 w-3.5" /> {selected.where}
+                      </span>
+                    )}
+                    {selected.responsible && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-foreground/80">
+                        <UserRound className="h-3.5 w-3.5" /> {selected.responsible}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {selected.details && (
+                  <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{selected.details}</p>
+                )}
+
+                <div className="mt-5 rounded-2xl bg-secondary/60 p-4">
+                  <div className="flex items-baseline justify-between font-numeric text-xs text-muted-foreground">
+                    <span>Récolté : <span className="font-semibold text-foreground">{fmt(selected.raised)}</span></span>
+                    <span>Objectif : <span className="font-semibold text-foreground">{fmt(selected.budget)}</span></span>
+                  </div>
+                  <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white">
+                    <div className="h-full rounded-full bg-brand-gradient" style={{ width: Math.min(100, Math.round((selected.raised / selected.budget) * 100)) + "%" }} />
+                  </div>
+                  <div className="mt-1.5 font-numeric text-[11px] font-semibold text-brand">
+                    {Math.min(100, Math.round((selected.raised / selected.budget) * 100))}% financé
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
 
-function ProjectCard({ p, isTop, onNext, style }: { p: Project; isTop: boolean; onNext: () => void; style: React.CSSProperties }) {
+function ProjectCard({ p, isTop, onNext, onOpen, style }: { p: Project; isTop: boolean; onNext: () => void; onOpen: () => void; style: React.CSSProperties }) {
   const pct = Math.min(100, Math.round((p.raised / p.budget) * 100));
   return (
     <article
@@ -92,7 +155,17 @@ function ProjectCard({ p, isTop, onNext, style }: { p: Project; isTop: boolean; 
           </div>
           <div className="mt-1.5 font-numeric text-[11px] font-semibold text-brand">{pct}% financé</div>
         </div>
-        {isTop && <div className="mt-3 text-center text-[11px] text-muted-foreground">Toucher la carte pour la suivante →</div>}
+        {isTop && (
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <button
+              onClick={(e) => { e.stopPropagation(); onOpen(); }}
+              className="hover-lift inline-flex items-center gap-1.5 rounded-full bg-brand-gradient px-4 py-2 text-xs font-semibold text-white shadow-soft"
+            >
+              Voir les détails <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+            <span className="text-[11px] text-muted-foreground">Toucher la carte pour la suivante →</span>
+          </div>
+        )}
       </div>
     </article>
   );
