@@ -444,6 +444,9 @@ const projectCols: Column[] = [
   { key: "raised", label: "Récolté ($)", type: "number" },
   { key: "since", label: "Période", hideOnMobile: true },
   { key: "description", label: "Description", type: "textarea", detailOnly: true },
+  { key: "where", label: "Lieu", detailOnly: true },
+  { key: "responsible", label: "Responsable", detailOnly: true },
+  { key: "details", label: "Détails du projet", type: "textarea", detailOnly: true },
 ];
 
 const deptCols: Column[] = [
