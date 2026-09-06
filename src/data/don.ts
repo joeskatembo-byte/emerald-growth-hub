@@ -8,6 +8,9 @@ export type Project = {
   hue: string;
   icon: string;
   since: string;
+  where?: string;
+  responsible?: string;
+  details?: string;
 };
 
 export const PROJECTS_KEY = "ee.projects.v1";
