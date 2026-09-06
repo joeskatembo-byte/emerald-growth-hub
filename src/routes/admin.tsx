@@ -1,13 +1,14 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays, HelpCircle, CalendarClock, UserCog } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays, HelpCircle, CalendarClock, UserCog, PanelBottom } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { CrudSection, type Column } from "@/components/admin/CrudSection";
 import { news, NEWS_KEY, faq, FAQ_KEY, type FaqItem, testimonials, media, MEDIA_KEY, verses, VERSES_KEY, type Verse, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
+import { FooterSection } from "@/components/admin/FooterSection";
 import { projects, PROJECTS_KEY, donFaq, DON_FAQ_KEY, type DonFaqItem } from "@/data/don";
 import { departments, DEPARTMENTS_KEY, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent, leaders, LEADERS_KEY, type Leader, weeklyProgram, PROGRAM_KEY, programDays, type ProgramSlot } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership" | "versets";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership" | "versets" | "footer";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
@@ -47,6 +48,7 @@ const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "programme", label: "Programme", icon: CalendarClock },
   { key: "leadership", label: "Leadership", icon: UserCog },
   { key: "versets", label: "Versets", icon: Quote },
+  { key: "footer", label: "Pied de page", icon: PanelBottom },
 ];
 
 function Page() {
@@ -298,6 +300,7 @@ function Page() {
             />
           )}
           {tab === "meditation" && <MeditationSection />}
+          {tab === "footer" && <FooterSection />}
           {tab === "medias" && (
             <CrudSection
               title="Médiathèque"
