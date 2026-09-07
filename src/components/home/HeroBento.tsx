@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { verses, VERSES_KEY, type Verse } from "@/data/mock";
-import { useCollection } from "@/lib/collections";
+import { useCollection, useSettings } from "@/lib/collections";
+import { HERO_KEY, heroSettings, type HeroSettings } from "@/data/home-settings";
 import { ArrowRight, Users, CalendarClock, Sparkles, Quote } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { TypedVerse } from "@/components/ui/typed-verse";
@@ -9,8 +10,9 @@ export function HeroBento() {
   const { rows: verseRows } = useCollection<Verse>(VERSES_KEY, verses);
   const items = verseRows.length ? verseRows : verses;
   const [verseIdx, setVerseIdx] = useState(0);
+  const { value: s } = useSettings<HeroSettings>(HERO_KEY, heroSettings);
   const [count, setCount] = useState(0);
-  const target = 1247;
+  const target = Number(s.membersCount) || 0;
   const handleIndexChange = useCallback((i: number) => setVerseIdx(i), []);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export function HeroBento() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [target]);
 
   return (
     <section className="mx-auto mt-6 w-[min(1200px,95%)]">
@@ -31,7 +33,7 @@ export function HeroBento() {
         {/* Main verse tile */}
         <div className="col-span-2 row-span-2 flex flex-col justify-between overflow-hidden rounded-3xl bg-brand-gradient p-6 text-white shadow-soft sm:p-8">
           <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-white/80">
-            <Sparkles className="h-3.5 w-3.5" /> Parole du jour
+            <Sparkles className="h-3.5 w-3.5" /> {s.verseLabel}
           </div>
           <div className="min-h-[120px]">
             <TypedVerse
@@ -50,19 +52,19 @@ export function HeroBento() {
 
         {/* Members counter */}
         <div className="hover-lift glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground"><Users className="h-4 w-4" /> Membres</div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground"><Users className="h-4 w-4" /> {s.membersLabel}</div>
           <div>
             <div className="font-numeric text-3xl font-bold text-foreground sm:text-4xl">{count.toLocaleString("fr-FR")}</div>
-            <div className="text-xs text-emerald-700">+34 ce mois</div>
+            <div className="text-xs text-emerald-700">{s.membersGrowth}</div>
           </div>
         </div>
 
         {/* Next service */}
         <div className="hover-lift glass-card flex flex-col justify-between rounded-3xl p-4 sm:p-5">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarClock className="h-4 w-4" /> Prochain culte</div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground"><CalendarClock className="h-4 w-4" /> {s.serviceLabel}</div>
           <div>
-            <div className="font-display text-lg font-bold text-foreground">Dimanche</div>
-            <div className="font-numeric text-sm text-brand">09h00 · Sanctuaire</div>
+            <div className="font-display text-lg font-bold text-foreground">{s.serviceDay}</div>
+            <div className="font-numeric text-sm text-brand">{s.serviceTime}</div>
           </div>
         </div>
 
@@ -70,8 +72,8 @@ export function HeroBento() {
         <div className="col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-400 via-rose-500 to-emerald-700 p-5 pb-12 text-white shadow-soft">
           <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_20%_20%,white_0,transparent_45%),radial-gradient(circle_at_80%_70%,white_0,transparent_40%)]" />
           <div className="relative flex h-full flex-col justify-between">
-            <div className="text-xs uppercase tracking-widest text-white/80">La communauté</div>
-            <div className="font-display text-xl font-bold leading-tight sm:text-2xl">Une église, plusieurs nations.</div>
+            <div className="text-xs uppercase tracking-widest text-white/80">{s.communityLabel}</div>
+            <div className="font-display text-xl font-bold leading-tight sm:text-2xl">{s.communityTitle}</div>
             <div className="group/av flex -space-x-2 pt-5">
 
               {[
@@ -101,7 +103,7 @@ export function HeroBento() {
               <div className="group/one relative">
                 <span className="pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-125 group-hover/one:opacity-100" />
                 <div className="relative grid h-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 px-2 backdrop-blur text-[11px] font-bold transition-all duration-500 group-hover/one:-translate-y-1.5 group-hover/one:scale-110 group-hover/one:bg-white group-hover/one:text-rose-600">
-                  +1.2k
+                  {s.extraMembers}
                 </div>
               </div>
             </div>
@@ -111,11 +113,11 @@ export function HeroBento() {
 
         {/* CTA */}
         <Link to="/inscription" className="glass-card group flex flex-col justify-between rounded-3xl p-4 transition hover:bg-brand-soft sm:p-5">
-          <div className="text-xs uppercase tracking-widest text-brand">Rejoindre</div>
+          <div className="text-xs uppercase tracking-widest text-brand">{s.ctaLabel}</div>
           <div>
-            <div className="font-display text-lg font-bold text-foreground">Nous rejoindre</div>
+            <div className="font-display text-lg font-bold text-foreground">{s.ctaTitle}</div>
             <div className="mt-1 flex items-center gap-1 text-sm text-brand">
-              Commencer <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              {s.ctaAction} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </div>
           </div>
         </Link>
@@ -127,7 +129,7 @@ export function HeroBento() {
           </div>
           <div className="min-w-0">
             <TypedVerse
-              items={[{ text: "Dieu ne cherche pas des géants, mais des cœurs disponibles.", ref: "Pasteur Emmanuel" }]}
+              items={[{ text: s.quote, ref: s.quoteAuthor }]}
               className="text-sm italic text-foreground/80"
               refClassName="mt-1 text-xs text-muted-foreground"
             />

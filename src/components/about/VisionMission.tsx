@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Compass, Target, Sparkles, ArrowRight } from "lucide-react";
+import { useSettings } from "@/lib/collections";
+import { VISION_KEY, visionSettings, type VisionSettings } from "@/data/home-settings";
 
 type Step = 0 | 1 | 2;
 
 export function VisionMission() {
+  const { value: t } = useSettings<VisionSettings>(VISION_KEY, visionSettings);
   const [selectedStep, setSelectedStep] = useState<Step>(0);
   const [hoveredStep, setHoveredStep] = useState<Step | null>(null);
 
@@ -16,13 +19,13 @@ export function VisionMission() {
     <section className="mx-auto mt-16 w-[min(1200px,95%)]">
       <div className="grid gap-6 md:grid-cols-[1.1fr_1fr] md:items-stretch">
         <div className="glass-card rounded-3xl p-8 shadow-soft sm:p-10">
-          <div className="text-xs uppercase tracking-widest text-brand">Vision & Mission</div>
-          <h2 className="mt-1 font-display text-3xl font-bold sm:text-4xl">Pourquoi existons-nous ?</h2>
+          <div className="text-xs uppercase tracking-widest text-brand">{t.label}</div>
+          <h2 className="mt-1 font-display text-3xl font-bold sm:text-4xl">{t.heading}</h2>
 
           <div className="mt-6 grid gap-3">
-            <StepDot n={0} label="Notre raison d'être" active={visibleStep === 0} selected={selectedStep === 0} onClick={() => goToStep(0)} onHover={() => setHoveredStep(0)} onLeave={() => setHoveredStep(null)} />
-            <StepDot n={1} label="La Vision" active={visibleStep === 1} selected={selectedStep === 1} onClick={() => goToStep(1)} onHover={() => setHoveredStep(1)} onLeave={() => setHoveredStep(null)} />
-            <StepDot n={2} label="La Mission" active={visibleStep === 2} selected={selectedStep === 2} onClick={() => goToStep(2)} onHover={() => setHoveredStep(2)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={0} label={t.reasonTitle} active={visibleStep === 0} selected={selectedStep === 0} onClick={() => goToStep(0)} onHover={() => setHoveredStep(0)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={1} label={t.visionTitle} active={visibleStep === 1} selected={selectedStep === 1} onClick={() => goToStep(1)} onHover={() => setHoveredStep(1)} onLeave={() => setHoveredStep(null)} />
+            <StepDot n={2} label={t.missionTitle} active={visibleStep === 2} selected={selectedStep === 2} onClick={() => goToStep(2)} onHover={() => setHoveredStep(2)} onLeave={() => setHoveredStep(null)} />
           </div>
 
           <button
@@ -35,18 +38,14 @@ export function VisionMission() {
         </div>
 
         <div className="relative">
-          <RevealCard show={visibleStep === 0} icon={Sparkles} title="Notre raison d'être" hue="from-emerald-600 to-emerald-900">
-            Faire de Kinshasa — et bien au-delà — un lieu où Jésus est connu, aimé et suivi. Chaque vie touchée devient un vecteur d'espérance pour la génération suivante.
+          <RevealCard show={visibleStep === 0} icon={Sparkles} title={t.reasonTitle} hue="from-emerald-600 to-emerald-900">
+            {t.reasonBody}
           </RevealCard>
-          <RevealCard show={visibleStep === 1} icon={Compass} title="La Vision" hue="from-indigo-600 to-blue-900">
-            Voir une multitude d'hommes, de femmes et d'enfants restaurés par la grâce, formés par la Parole et envoyés dans leurs sphères d'influence — familles, écoles, entreprises, quartiers.
+          <RevealCard show={visibleStep === 1} icon={Compass} title={t.visionTitle} hue="from-indigo-600 to-blue-900">
+            {t.visionBody}
           </RevealCard>
-          <RevealCard show={visibleStep === 2} icon={Target} title="La Mission" hue="from-amber-500 to-orange-700">
-            <span className="font-semibold text-white">Accueillir</span> — chaque âme est précieuse.
-            <br />
-            <span className="font-semibold text-white">Restaurer</span> — par la Parole, la prière et la communion fraternelle.
-            <br />
-            <span className="font-semibold text-white">Envoyer</span> — chaque disciple devient à son tour un serviteur.
+          <RevealCard show={visibleStep === 2} icon={Target} title={t.missionTitle} hue="from-amber-500 to-orange-700">
+            {t.missionBody}
           </RevealCard>
         </div>
       </div>

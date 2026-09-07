@@ -1,7 +1,7 @@
 import { FancySelect } from "@/components/ui/fancy-select";
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays, HelpCircle, CalendarClock, UserCog, PanelBottom } from "lucide-react";
+import { Users, Newspaper, Quote, Image, HandHeart, MessageCircle, Building2, History, LogOut, Trash2, ShieldCheck, X, User, BookOpen, CheckCircle2, Clock, CalendarDays, HelpCircle, CalendarClock, UserCog, PanelBottom, LayoutDashboard, Compass } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -9,6 +9,8 @@ import { CrudSection, type Column } from "@/components/admin/CrudSection";
 import { news, NEWS_KEY, faq, FAQ_KEY, type FaqItem, testimonials, media, MEDIA_KEY, verses, VERSES_KEY, type Verse, TESTIMONIALS_KEY, testimonyStatuses, type Testimony } from "@/data/mock";
 import { MeditationSection } from "@/components/admin/MeditationSection";
 import { FooterSection } from "@/components/admin/FooterSection";
+import { SettingsSection } from "@/components/admin/SettingsSection";
+import { HERO_KEY, heroSettings, type HeroSettings, VISION_KEY, visionSettings, type VisionSettings } from "@/data/home-settings";
 import { projects, PROJECTS_KEY, donFaq, DON_FAQ_KEY, type DonFaqItem } from "@/data/don";
 import { departments, DEPARTMENTS_KEY, timeline, timelineHues, TIMELINE_KEY, upcomingEvents, EVENTS_KEY, type UpcomingEvent, leaders, LEADERS_KEY, type Leader, weeklyProgram, PROGRAM_KEY, programDays, type ProgramSlot } from "@/data/about";
 import { departmentNames, communes } from "@/data/inscription";
@@ -30,7 +32,7 @@ export const Route = createFileRoute("/admin")({
   component: Page,
 });
 
-type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership" | "versets" | "footer";
+type TabKey = "membres" | "news" | "temoignages" | "meditation" | "medias" | "projets" | "departements" | "histoire" | "evenements" | "messages" | "faq" | "donfaq" | "programme" | "leadership" | "versets" | "accueil" | "vision" | "footer";
 
 const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { key: "membres", label: "Fidèles", icon: Users },
@@ -48,6 +50,8 @@ const tabs: { key: TabKey; label: string; icon: React.ComponentType<{ className?
   { key: "programme", label: "Programme", icon: CalendarClock },
   { key: "leadership", label: "Leadership", icon: UserCog },
   { key: "versets", label: "Versets", icon: Quote },
+  { key: "accueil", label: "Accueil (hero)", icon: LayoutDashboard },
+  { key: "vision", label: "Vision & Mission", icon: Compass },
   { key: "footer", label: "Pied de page", icon: PanelBottom },
 ];
 
@@ -300,6 +304,65 @@ function Page() {
             />
           )}
           {tab === "meditation" && <MeditationSection />}
+          {tab === "accueil" && (
+            <SettingsSection<HeroSettings>
+              title="Accueil — bloc d'accueil"
+              description="Compteur de membres, prochain culte, communauté, bouton d'action et citation du pasteur."
+              storageKey={HERO_KEY}
+              seed={heroSettings}
+              successMessage="La page d'accueil est déjà à jour."
+              steps={[
+                { title: "Membres & culte", fields: [
+                  { key: "verseLabel", label: "Titre parole du jour" },
+                  { key: "membersLabel", label: "Libellé membres" },
+                  { key: "membersCount", label: "Nombre de membres", type: "number" },
+                  { key: "membersGrowth", label: "Évolution du mois" },
+                  { key: "serviceLabel", label: "Libellé prochain culte" },
+                  { key: "serviceDay", label: "Jour du culte" },
+                  { key: "serviceTime", label: "Heure & lieu" },
+                ] },
+                { title: "Communauté & bouton", fields: [
+                  { key: "communityLabel", label: "Libellé communauté" },
+                  { key: "communityTitle", label: "Phrase communauté", wide: true },
+                  { key: "extraMembers", label: "Compteur d'avatars" },
+                  { key: "ctaLabel", label: "Libellé bouton" },
+                  { key: "ctaTitle", label: "Titre bouton" },
+                  { key: "ctaAction", label: "Texte d'action" },
+                ] },
+                { title: "Citation du pasteur", fields: [
+                  { key: "quote", label: "Citation", type: "textarea" },
+                  { key: "quoteAuthor", label: "Auteur" },
+                ] },
+              ]}
+            />
+          )}
+          {tab === "vision" && (
+            <SettingsSection<VisionSettings>
+              title="Vision & Mission"
+              description="Raison d'être, vision et mission affichées sur la page À propos."
+              storageKey={VISION_KEY}
+              seed={visionSettings}
+              successMessage="La page À propos est déjà à jour."
+              steps={[
+                { title: "En-tête", fields: [
+                  { key: "label", label: "Sur-titre" },
+                  { key: "heading", label: "Titre de section" },
+                ] },
+                { title: "Raison d'être", fields: [
+                  { key: "reasonTitle", label: "Titre", wide: true },
+                  { key: "reasonBody", label: "Texte", type: "textarea", rows: 4 },
+                ] },
+                { title: "Vision", fields: [
+                  { key: "visionTitle", label: "Titre", wide: true },
+                  { key: "visionBody", label: "Texte", type: "textarea", rows: 4 },
+                ] },
+                { title: "Mission", fields: [
+                  { key: "missionTitle", label: "Titre", wide: true },
+                  { key: "missionBody", label: "Texte", type: "textarea", rows: 4 },
+                ] },
+              ]}
+            />
+          )}
           {tab === "footer" && <FooterSection />}
           {tab === "medias" && (
             <CrudSection
