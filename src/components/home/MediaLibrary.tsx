@@ -36,7 +36,7 @@ export function MediaLibrary() {
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 className={
-                  "rounded-xl px-4 py-2 text-sm font-semibold transition " +
+                  "tap-motion rounded-xl px-4 py-2 text-sm font-semibold transition " +
                   (tab === t.id ? "bg-brand-gradient text-white shadow-soft" : "text-muted-foreground hover:text-foreground")
                 }
               >
@@ -53,7 +53,7 @@ export function MediaLibrary() {
             <button
               key={m.id}
               onClick={() => setSelected(m)}
-              className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-soft transition hover:scale-[1.02]"
+              className="tap-motion group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-soft transition hover:scale-[1.02] focus-visible:scale-[1.02]"
             >
               <div className={"absolute inset-0 bg-gradient-to-br " + m.hue} />
               <div className="absolute inset-0 [background:radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35)_0,transparent_50%)]" />

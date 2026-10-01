@@ -29,7 +29,7 @@ export function Departments() {
                 key={d.id}
                 onClick={() => setActive(d.id)}
                 className={
-                  "group flex items-center gap-3 rounded-2xl border p-3 text-left transition " +
+                  "tap-motion group flex items-center gap-3 rounded-2xl border p-3 text-left transition " +
                   (isActive
                     ? "border-transparent bg-brand-gradient text-white shadow-soft"
                     : "border-border bg-white text-foreground hover:border-brand/40 hover:bg-brand-soft")

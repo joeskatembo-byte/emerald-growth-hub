@@ -19,7 +19,7 @@ export function HorizontalAccordion() {
             <div key={item.id ?? i} className="glass-card overflow-hidden rounded-3xl">
               <button
                 onClick={() => setOpen(isOpen ? null : i)}
-                className="flex w-full items-center gap-4 p-5 text-left"
+                className="tap-motion flex w-full items-center gap-4 p-5 text-left"
                 aria-expanded={isOpen}
               >
                 <span className="font-numeric text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
