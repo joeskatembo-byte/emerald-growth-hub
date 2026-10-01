@@ -90,7 +90,6 @@ export function HeroBento() {
                   aria-label={`${m.n}, ${m.d}`}
                   aria-pressed={activeMember === m.l}
                   onClick={() => setActiveMember((current) => current === m.l ? null : m.l)}
-                  onFocus={() => setActiveMember(m.l)}
                   className={`group/one tap-motion relative transition-all duration-500 ease-out hover:z-30 group-hover/av:space-x-0 group-hover/av:ml-1 hover:!ml-2 focus:z-30 focus:!ml-2 ${activeMember === m.l ? "z-30 !ml-2" : ""}`}
                   style={{ transitionDelay: `${i * 40}ms` }}
                 >
