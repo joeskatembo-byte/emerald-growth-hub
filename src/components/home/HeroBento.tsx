@@ -12,6 +12,7 @@ export function HeroBento() {
   const [verseIdx, setVerseIdx] = useState(0);
   const { value: s } = useSettings<HeroSettings>(HERO_KEY, heroSettings);
   const [count, setCount] = useState(0);
+  const [activeMember, setActiveMember] = useState<string | null>(null);
   const target = Number(s.membersCount) || 0;
   const handleIndexChange = useCallback((i: number) => setVerseIdx(i), []);
 
@@ -74,7 +75,7 @@ export function HeroBento() {
           <div className="relative flex h-full flex-col justify-between">
             <div className="text-xs uppercase tracking-widest text-white/80">{s.communityLabel}</div>
             <div className="font-display text-xl font-bold leading-tight sm:text-2xl">{s.communityTitle}</div>
-            <div className="group/av flex -space-x-2 pt-5">
+            <div className="group/av flex -space-x-2 pt-5" onMouseLeave={() => setActiveMember(null)}>
 
               {[
                 { l: "G", n: "Grâce", d: "Louange" },
@@ -83,22 +84,27 @@ export function HeroBento() {
                 { l: "M", n: "Marie", d: "Intercession" },
                 { l: "C", n: "Célestin", d: "Diaconat" },
               ].map((m, i) => (
-                <div
+                <button
+                  type="button"
                   key={m.l}
-                  className="group/one relative transition-all duration-500 ease-out hover:z-30 group-hover/av:space-x-0 group-hover/av:ml-1 hover:!ml-2"
+                  aria-label={`${m.n}, ${m.d}`}
+                  aria-pressed={activeMember === m.l}
+                  onClick={() => setActiveMember((current) => current === m.l ? null : m.l)}
+                  onFocus={() => setActiveMember(m.l)}
+                  className={`group/one tap-motion relative transition-all duration-500 ease-out hover:z-30 group-hover/av:space-x-0 group-hover/av:ml-1 hover:!ml-2 focus:z-30 focus:!ml-2 ${activeMember === m.l ? "z-30 !ml-2" : ""}`}
                   style={{ transitionDelay: `${i * 40}ms` }}
                 >
-                  <span className="pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-150 group-hover/one:opacity-100" />
-                  <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-white/70 opacity-0 group-hover/one:animate-ping group-hover/one:opacity-100" />
-                  <div className="relative grid h-8 w-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold transition-all duration-500 ease-out group-hover/one:-translate-y-1.5 group-hover/one:scale-125 group-hover/one:bg-white group-hover/one:text-rose-600 group-hover/one:shadow-soft">
+                  <span className={`pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-150 group-hover/one:opacity-100 group-focus/one:scale-150 group-focus/one:opacity-100 ${activeMember === m.l ? "scale-150 opacity-100" : ""}`} />
+                  <span className={`pointer-events-none absolute inset-0 rounded-full border-2 border-white/70 opacity-0 group-hover/one:animate-ping group-hover/one:opacity-100 group-focus/one:animate-ping group-focus/one:opacity-100 ${activeMember === m.l ? "animate-ping opacity-100" : ""}`} />
+                  <span className={`relative grid h-8 w-8 cursor-pointer place-items-center rounded-full border-2 border-white bg-white/20 backdrop-blur text-[11px] font-bold transition-all duration-500 ease-out group-hover/one:-translate-y-1.5 group-hover/one:scale-125 group-hover/one:bg-white group-hover/one:text-rose-600 group-hover/one:shadow-soft group-focus/one:-translate-y-1.5 group-focus/one:scale-125 group-focus/one:bg-white group-focus/one:text-rose-600 ${activeMember === m.l ? "-translate-y-1.5 scale-125 bg-white text-rose-600 shadow-soft" : ""}`}>
                     {m.l}
-                  </div>
-                  <div className="pointer-events-none absolute -bottom-1 left-1/2 z-40 max-w-[40vw] -translate-x-1/2 translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100">
+                  </span>
+                  <span className={`pointer-events-none absolute -bottom-1 left-1/2 z-40 max-w-[40vw] -translate-x-1/2 translate-y-full scale-90 whitespace-nowrap rounded-xl bg-white/95 px-2.5 py-1 text-center opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover/one:scale-100 group-hover/one:opacity-100 group-focus/one:scale-100 group-focus/one:opacity-100 ${activeMember === m.l ? "scale-100 opacity-100" : ""}`}>
                     <div className="truncate text-[11px] font-bold text-foreground">{m.n}</div>
                     <div className="truncate text-[9px] uppercase tracking-widest text-muted-foreground">{m.d}</div>
-                  </div>
+                  </span>
 
-                </div>
+                </button>
               ))}
               <div className="group/one relative">
                 <span className="pointer-events-none absolute inset-0 rounded-full bg-white/50 opacity-0 blur-md transition duration-500 group-hover/one:scale-125 group-hover/one:opacity-100" />
@@ -112,12 +118,12 @@ export function HeroBento() {
         </div>
 
         {/* CTA */}
-        <Link to="/inscription" className="glass-card group flex flex-col justify-between rounded-3xl p-4 transition hover:bg-brand-soft sm:p-5">
+        <Link to="/inscription" className="tap-motion glass-card group flex flex-col justify-between rounded-3xl p-4 transition hover:bg-brand-soft focus-visible:bg-brand-soft sm:p-5">
           <div className="text-xs uppercase tracking-widest text-brand">{s.ctaLabel}</div>
           <div>
             <div className="font-display text-lg font-bold text-foreground">{s.ctaTitle}</div>
             <div className="mt-1 flex items-center gap-1 text-sm text-brand">
-              {s.ctaAction} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              {s.ctaAction} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1 group-focus-visible:translate-x-1" />
             </div>
           </div>
         </Link>

@@ -21,7 +21,7 @@ export function Leadership() {
           <button
             key={l.id}
             onClick={() => setOpen(l)}
-            className="group relative overflow-hidden rounded-3xl text-left transition hover:-translate-y-1"
+            className="tap-motion group relative overflow-hidden rounded-3xl text-left transition hover:-translate-y-1 focus-visible:-translate-y-1"
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${l.hue}`} />
             <div className="pointer-events-none absolute inset-0 opacity-40" style={{
@@ -41,7 +41,7 @@ export function Leadership() {
                 <Quote className="h-4 w-4 text-white/70" />
                 <p className="mt-1 text-sm italic text-white/95">« {l.quote} »</p>
               </div>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-white/90 transition group-hover:gap-2">
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-white/90 transition group-hover:gap-2 group-focus-visible:gap-2">
                 Lire la bio →
               </div>
             </div>

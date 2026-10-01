@@ -40,9 +40,9 @@ export function NewsStories() {
           <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">Actualités de l'église</h2>
         </div>
         <div className="hidden gap-1 sm:flex">
-          <button onClick={() => go(-1)} className="grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label="Précédent"><ChevronLeft className="h-4 w-4" /></button>
-          <button onClick={() => setPaused((p) => !p)} className="grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label="Pause">{paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}</button>
-          <button onClick={() => go(1)} className="grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label="Suivant"><ChevronRight className="h-4 w-4" /></button>
+          <button onClick={() => go(-1)} className="tap-motion grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label="Précédent"><ChevronLeft className="h-4 w-4" /></button>
+          <button onClick={() => setPaused((p) => !p)} className="tap-motion grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label={paused ? "Reprendre" : "Pause"}>{paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}</button>
+          <button onClick={() => go(1)} className="tap-motion grid h-9 w-9 place-items-center rounded-full glass-card hover:bg-brand-soft" aria-label="Suivant"><ChevronRight className="h-4 w-4" /></button>
         </div>
       </div>
       <div className="glass-card overflow-hidden rounded-3xl p-4 sm:p-6" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
@@ -68,9 +68,9 @@ export function NewsStories() {
           </div>
         </div>
         <div className="mt-4 flex justify-center gap-1 sm:hidden">
-          <button onClick={() => go(-1)} className="grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label="Précédent"><ChevronLeft className="h-4 w-4" /></button>
-          <button onClick={() => setPaused((p) => !p)} className="grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label="Pause">{paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}</button>
-          <button onClick={() => go(1)} className="grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label="Suivant"><ChevronRight className="h-4 w-4" /></button>
+          <button onClick={() => go(-1)} className="tap-motion grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label="Précédent"><ChevronLeft className="h-4 w-4" /></button>
+          <button onClick={() => setPaused((p) => !p)} className="tap-motion grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label={paused ? "Reprendre" : "Pause"}>{paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}</button>
+          <button onClick={() => go(1)} className="tap-motion grid h-9 w-9 place-items-center rounded-full bg-secondary" aria-label="Suivant"><ChevronRight className="h-4 w-4" /></button>
         </div>
       </div>
     </section>

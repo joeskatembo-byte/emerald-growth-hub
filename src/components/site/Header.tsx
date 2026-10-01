@@ -156,7 +156,7 @@ export function Header() {
           {/* Mobile burger */}
           <button
             onClick={() => { setDrawer(true); setDrawerStep(null); }}
-            className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-soft text-brand md:hidden"
+            className="tap-motion grid h-10 w-10 place-items-center rounded-2xl bg-brand-soft text-brand md:hidden"
             aria-label="Ouvrir le menu"
           >
             <Menu className="h-5 w-5" />
@@ -210,7 +210,7 @@ export function Header() {
               <button
                 key={it.key}
                 onClick={() => { setDrawer(true); setDrawerStep(it.submenu ? it.key : null); if (!it.submenu && it.to) window.location.assign(it.to); }}
-                className="grid h-10 w-10 place-items-center rounded-full text-foreground/80 hover:bg-brand-soft hover:text-brand"
+                className="tap-motion grid h-10 w-10 place-items-center rounded-full text-foreground/80 hover:bg-brand-soft hover:text-brand"
                 aria-label={it.label}
               >
                 <Icon className="h-4 w-4" />
@@ -224,7 +224,7 @@ export function Header() {
       {drawer && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm animate-fade-in" onClick={() => setDrawer(false)} />
-          <div className="absolute inset-x-0 bottom-0 top-16 animate-fade-in overflow-hidden rounded-t-3xl bg-background p-4 shadow-2xl">
+          <div className="absolute inset-x-0 bottom-0 top-16 animate-slide-in-right overflow-hidden rounded-t-3xl bg-background p-4 shadow-2xl">
             <div className="mb-3 flex items-center justify-between">
               {drawerStep ? (
                 <button onClick={() => setDrawerStep(null)} className="flex items-center gap-1 rounded-full bg-brand-soft px-3 py-1.5 text-sm text-brand">
@@ -255,13 +255,13 @@ export function Header() {
                   );
                   if (it.submenu) {
                     return (
-                      <button key={it.key} onClick={() => setDrawerStep(it.key)} className="text-left">
+                      <button key={it.key} onClick={() => setDrawerStep(it.key)} className="tap-motion text-left">
                         {content}
                       </button>
                     );
                   }
                   return (
-                    <Link key={it.key} to={it.to!} onClick={() => setDrawer(false)}>
+                    <Link key={it.key} to={it.to!} onClick={() => setDrawer(false)} className="tap-motion">
                       {content}
                     </Link>
                   );
@@ -272,7 +272,7 @@ export function Header() {
                 {items.find((i) => i.key === drawerStep)?.submenu?.map((s) => {
                   const SIcon = s.icon;
                   return (
-                    <Link key={s.label} to={s.to} hash={s.hash} onClick={() => setDrawer(false)} className="glass-card flex items-center gap-3 rounded-2xl p-3">
+                    <Link key={s.label} to={s.to} hash={s.hash} onClick={() => setDrawer(false)} className="tap-motion glass-card flex items-center gap-3 rounded-2xl p-3">
                       <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-gradient text-white">
                         <SIcon className="h-5 w-5" />
                       </div>

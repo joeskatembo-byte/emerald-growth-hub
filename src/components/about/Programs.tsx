@@ -48,7 +48,7 @@ export function Programs() {
               key={d}
               onClick={() => setSelected(i)}
               className={
-                "flex min-w-[92px] shrink-0 flex-col items-center gap-0.5 rounded-2xl px-4 py-2.5 text-sm transition " +
+                "tap-motion flex min-w-[92px] shrink-0 flex-col items-center gap-0.5 rounded-2xl px-4 py-2.5 text-sm transition " +
                 (isActive
                   ? "bg-brand-gradient text-white shadow-soft"
                   : "bg-white text-foreground/80 hover:bg-brand-soft hover:text-brand")
@@ -96,7 +96,7 @@ export function Programs() {
             <button
               key={e.id}
               onClick={() => setSelectedEvent(e)}
-              className="hover-lift glass-card rounded-3xl p-5 text-left shadow-soft"
+              className="tap-motion hover-lift glass-card rounded-3xl p-5 text-left shadow-soft"
             >
               <div className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${e.hue} px-3 py-1 text-xs font-semibold text-white`}>
                 <span className="font-numeric">{e.date}</span>
