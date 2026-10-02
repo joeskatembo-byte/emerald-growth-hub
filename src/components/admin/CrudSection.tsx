@@ -41,7 +41,6 @@ export function CrudSection<T extends Row>({
   const [q, setQ] = useState("");
   const [detail, setDetail] = useState<T | null>(null);
   const tableColumns = columns.filter((c) => !c.detailOnly);
-  const detailColumns = columns.filter((c) => c.detailOnly);
 
   const startNew = () => {
     setDraft(Object.fromEntries(columns.map((c) => [c.key, c.type === "number" ? 0 : c.options?.[0] ?? ""])));
@@ -135,12 +134,11 @@ export function CrudSection<T extends Row>({
             {filtered.map((r) => (
               <tr
                 key={r.id}
-                onClick={() => detailColumns.length > 0 && setDetail(r)}
+                onClick={() => setDetail(r)}
                 onDragOver={canDrag ? (e) => { e.preventDefault(); setOverId(r.id); } : undefined}
                 onDrop={canDrag ? (e) => { e.preventDefault(); if (dragId) reorder(dragId, r.id); setDragId(null); setOverId(null); } : undefined}
                 className={
-                  "bg-card transition duration-300 hover:bg-brand-soft/60 " +
-                  (detailColumns.length > 0 ? "cursor-pointer " : "") +
+                  "cursor-pointer bg-card transition duration-300 hover:bg-brand-soft/60 active:bg-brand-soft/60 " +
                   (canDrag && dragId === r.id ? "opacity-40 " : "") +
                   (canDrag && overId === r.id && dragId !== r.id ? "ring-2 ring-brand/40 " : "")
                 }
@@ -222,12 +220,16 @@ export function CrudSection<T extends Row>({
                 </button>
               </div>
               <div className="mt-5 space-y-4">
-                {detailColumns.map((c) => (
-                  <div key={c.key} className="rounded-2xl bg-brand-soft/40 p-4">
-                    <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{c.label}</div>
-                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed">{String(detail[c.key] ?? "—")}</p>
-                  </div>
-                ))}
+                {columns.map((c) => {
+                  const v = detail[c.key];
+                  const txt = v === undefined || v === null || v === "" ? "—" : String(v);
+                  return (
+                    <div key={c.key} className="rounded-2xl bg-brand-soft/40 p-4">
+                      <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{c.label}</div>
+                      <p className="mt-1 whitespace-pre-line break-words text-sm leading-relaxed">{txt}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>,
