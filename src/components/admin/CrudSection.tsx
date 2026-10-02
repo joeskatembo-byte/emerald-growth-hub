@@ -41,7 +41,6 @@ export function CrudSection<T extends Row>({
   const [q, setQ] = useState("");
   const [detail, setDetail] = useState<T | null>(null);
   const tableColumns = columns.filter((c) => !c.detailOnly);
-  const detailColumns = columns.filter((c) => c.detailOnly);
 
   const startNew = () => {
     setDraft(Object.fromEntries(columns.map((c) => [c.key, c.type === "number" ? 0 : c.options?.[0] ?? ""])));
