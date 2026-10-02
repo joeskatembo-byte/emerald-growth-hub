@@ -71,16 +71,16 @@ export function FooterSection() {
             <p className="mt-3 text-sm text-white/80">{value.tagline}</p>
             <p className="mt-4 text-xs text-white/60">© {new Date().getFullYear()} {value.legal}</p>
           </div>
-          <div className="grid gap-2 rounded-3xl bg-card p-5 text-sm shadow-soft">
+          <div className="grid content-start gap-4 text-sm">
             {[
               ["Adresse", value.address],
               ["Téléphone", value.phone],
               ["E-mail", value.email],
               ["Titres", `${value.navTitle} · ${value.contactTitle} · ${value.socialTitle} · ${value.partnersTitle}`],
             ].map(([k, v]) => (
-              <div key={k}>
-                <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{k}</div>
-                <div className="truncate">{v || "—"}</div>
+              <div key={k} className="hover-lift rounded-2xl bg-brand-soft/40 p-4 shadow-soft">
+                <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{k}</div>
+                <div className="mt-1.5 break-words font-medium text-foreground/90">{v || "—"}</div>
               </div>
             ))}
           </div>

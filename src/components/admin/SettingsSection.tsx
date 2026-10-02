@@ -69,11 +69,19 @@ export function SettingsSection<T extends Record<string, unknown>>({
           </div>
         </div>
 
-        <div className="mt-4 grid gap-2 rounded-3xl bg-card p-5 text-sm shadow-soft sm:grid-cols-2">
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {allFields.map((f) => (
-            <div key={f.key} className={f.type === "textarea" ? "sm:col-span-2" : ""}>
-              <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{f.label}</div>
-              <div className="text-foreground/90">{String(value[f.key] ?? "") || "—"}</div>
+            <div
+              key={f.key}
+              className={
+                "hover-lift rounded-2xl bg-brand-soft/40 p-4 text-sm shadow-soft " +
+                (f.type === "textarea" ? "sm:col-span-2" : "")
+              }
+            >
+              <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{f.label}</div>
+              <div className="mt-1.5 whitespace-pre-line break-words font-medium leading-relaxed text-foreground/90">
+                {String(value[f.key] ?? "") || "—"}
+              </div>
             </div>
           ))}
         </div>
