@@ -276,6 +276,28 @@
   .story-bar-fill, .marquee-track { animation: none !important; }
 }
 
+/* Particules blanches flottantes pour les grands blocs verts (douces, en boucle) */
+@keyframes green-particles-drift {
+  from { background-position: 0 0, 45px 60px; }
+  to { background-position: 90px -180px, 185px -80px; }
+}
+@utility green-particles {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.2;
+    background-image:
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 1.25px, transparent 1.25px),
+      radial-gradient(circle, rgba(255, 255, 255, 0.7) 1.25px, transparent 1.25px);
+    background-size: 90px 90px, 140px 140px;
+    background-position: 0 0, 45px 60px;
+    animation: green-particles-drift 26s linear infinite;
+  }
+}
+
 /* Masquer les barres de défilement (contenu toujours scrollable au besoin) */
 @utility no-scrollbar {
   scrollbar-width: none;
@@ -328,6 +350,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .typed-cursor { animation: none !important; }
+  .green-particles::before { animation: none !important; }
   .hover-tilt:hover, .hover-tilt:active, .hover-lift:hover, .hover-lift:active, .tap-motion:active { transform: none !important; }
   .story-bar-fill, .marquee-track { animation: none !important; }
   *, *::before, *::after {

@@ -23,7 +23,7 @@ export function Footer() {
 
   return (
     <footer className="mt-16 px-3 pb-6 sm:px-6">
-      <div className="mx-auto max-w-[1200px] overflow-hidden rounded-3xl glass-dark shadow-soft">
+      <div className="green-particles mx-auto max-w-[1200px] overflow-hidden rounded-3xl glass-dark shadow-soft">
         <div className="grid gap-8 p-8 sm:p-10 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2.5">
