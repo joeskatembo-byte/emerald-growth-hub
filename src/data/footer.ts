@@ -47,7 +47,7 @@ export const footerSocials: FooterSocial[] = [
   { id: "fs1", network: "Facebook", url: "https://facebook.com" },
   { id: "fs2", network: "YouTube", url: "https://youtube.com" },
   { id: "fs3", network: "Instagram", url: "https://instagram.com" },
-  { id: "fs4", network: "WhatsApp", url: "https://wa.me/243000000000" },
+  { id: "fs4", network: "WhatsApp", url: "https://wa.me/243860039277?text=Bonjour%20Église%20Emmanuel%2C%20je%20vous%20contacte%20depuis%20votre%20site%20web" },
   { id: "fs5", network: "TikTok", url: "https://tiktok.com" },
 ];
 

@@ -32,7 +32,7 @@ export function HeroBento() {
     <section className="mx-auto mt-6 w-[min(1200px,95%)]">
       <div className="grid auto-rows-[minmax(120px,auto)] grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {/* Main verse tile */}
-        <div className="col-span-2 row-span-2 flex flex-col justify-between overflow-hidden rounded-3xl bg-brand-gradient p-6 text-white shadow-soft sm:p-8">
+        <div className="green-particles col-span-2 row-span-2 flex flex-col justify-between overflow-hidden rounded-3xl bg-brand-gradient p-6 text-white shadow-soft sm:p-8">
           <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-white/80">
             <Sparkles className="h-3.5 w-3.5" /> {s.verseLabel}
           </div>

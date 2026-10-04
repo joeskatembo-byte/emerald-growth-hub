@@ -61,7 +61,7 @@ export function MeditationSection() {
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {rows.map((m) => (
-          <article key={m.id} className={"hover-lift rounded-3xl p-5 shadow-soft " + (m.active === "Oui" ? "bg-brand-gradient text-white" : "bg-card")}>
+          <article key={m.id} className={"hover-lift rounded-3xl p-5 shadow-soft " + (m.active === "Oui" ? "green-particles overflow-hidden bg-brand-gradient text-white" : "bg-card")}>
             <div className="flex items-start justify-between gap-3">
               <div className="font-display text-lg font-bold">{m.book}</div>
               <div className="font-mono text-sm">{m.verse}</div>

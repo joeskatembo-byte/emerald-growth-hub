@@ -63,7 +63,7 @@ export function FooterSection() {
         </div>
 
         <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <div className="rounded-3xl bg-brand-gradient p-5 text-white shadow-soft">
+          <div className="green-particles overflow-hidden rounded-3xl bg-brand-gradient p-5 text-white shadow-soft">
             <div className="flex items-center gap-2.5">
               <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/15 backdrop-blur"><Church className="h-5 w-5" /></div>
               <div className="font-display text-lg font-bold">{value.name}</div>
