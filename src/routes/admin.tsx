@@ -88,7 +88,7 @@ function Page() {
     <div className="min-h-screen">
       <Header />
       <main className="mx-auto mt-6 w-[min(1200px,95%)] pb-10">
-        <div className="relative overflow-hidden rounded-3xl bg-brand-gradient p-8 text-white shadow-soft">
+        <div className="green-particles relative overflow-hidden rounded-3xl bg-brand-gradient p-8 text-white shadow-soft">
           <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
           <div className="relative flex flex-wrap items-center justify-between gap-4">
             <div>

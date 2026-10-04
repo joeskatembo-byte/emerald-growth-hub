@@ -82,7 +82,7 @@ function Page() {
       <Header />
       <main className="mx-auto mt-6 w-[min(1200px,95%)] pb-14">
         {/* ── Bannière signature ───────────────────────────────── */}
-        <section className="relative overflow-hidden rounded-[2rem] bg-brand-gradient p-6 text-white shadow-soft sm:p-10">
+        <section className="green-particles relative overflow-hidden rounded-[2rem] bg-brand-gradient p-6 text-white shadow-soft sm:p-10">
           <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 animate-pulse rounded-full bg-white/20 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-emerald-300/20 blur-3xl" />
           <div

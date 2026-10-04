@@ -31,7 +31,7 @@ export function Departments() {
                 className={
                   "tap-motion group flex items-center gap-3 rounded-2xl border p-3 text-left transition " +
                   (isActive
-                    ? "border-transparent bg-brand-gradient text-white shadow-soft"
+                    ? "green-particles overflow-hidden border-transparent bg-brand-gradient text-white shadow-soft"
                     : "border-border bg-white text-foreground hover:border-brand/40 hover:bg-brand-soft")
                 }
               >
