@@ -1,9 +1,50 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { Plus, Pencil, Trash2, X, Check, RotateCcw, ChevronRight, ChevronLeft, Star, BookOpen } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Check, RotateCcw, ChevronRight, ChevronLeft, Star, BookOpen, Link2, Copy } from "lucide-react";
 import { useCollection } from "@/lib/collections";
 import { useConfirm } from "@/components/ui/confirm";
-import { MEDITATION_KEY, meditations as seed, type Meditation } from "@/data/mock";
+import { INVITES_KEY, MEDITATION_KEY, meditations as seed, type Meditation, type PreachInvite } from "@/data/mock";
+
+/** Génère un lien à envoyer à un pasteur invité pour qu'il propose une méditation. */
+function InvitePanel() {
+  const { rows, create, remove } = useCollection<PreachInvite>(INVITES_KEY, []);
+  const { notifySuccess } = useConfirm();
+  const [guest, setGuest] = useState("");
+  const url = (t: string) => (typeof window !== "undefined" ? window.location.origin : "") + "/precher/" + t;
+  const copy = async (t: string) => {
+    try { await navigator.clipboard.writeText(url(t)); } catch { /* ignore */ }
+    notifySuccess("Lien copié", "Envoyez-le au pasteur invité (WhatsApp, SMS, e-mail).");
+  };
+  const generate = () => {
+    const token = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    create({ token, guest: guest.trim(), createdAt: new Date().toISOString().slice(0, 10), used: "Non" });
+    setGuest("");
+    copy(token);
+  };
+  return (
+    <div className="mt-4 rounded-3xl bg-brand-soft/40 p-4">
+      <div className="flex items-center gap-2 font-display font-bold"><Link2 className="h-4 w-4 text-brand" /> Inviter un pasteur à prêcher à distance</div>
+      <p className="mt-1 text-xs text-muted-foreground">Sa méditation arrivera ici « En attente » : elle ne sera publique qu'après votre validation (étoile).</p>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+        <input className={field} placeholder="Nom du pasteur invité (ex. Pasteur Daniel)" value={guest} onChange={(e) => setGuest(e.target.value)} />
+        <button disabled={!guest.trim()} onClick={generate} className="tap-motion flex shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Copy className="h-4 w-4" /> Créer et copier le lien</button>
+      </div>
+      {rows.length > 0 && (
+        <ul className="mt-3 grid gap-2">
+          {rows.map((i) => (
+            <li key={i.id} className="flex items-center justify-between gap-2 rounded-2xl bg-card px-3 py-2 text-sm">
+              <span className="min-w-0 truncate">{i.guest} <span className="text-xs text-muted-foreground">· {i.used === "Oui" ? "utilisé" : "en attente de réponse"}</span></span>
+              <span className="flex shrink-0 gap-1.5">
+                {i.used === "Non" && <button onClick={() => copy(i.token)} aria-label="Copier le lien" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground hover:text-brand"><Copy className="h-3.5 w-3.5" /></button>}
+                <button onClick={() => remove(i.id)} aria-label="Révoquer" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 const field =
   "w-full rounded-2xl border border-border bg-card px-3 py-2 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20";
@@ -25,7 +66,7 @@ export function MeditationSection() {
   };
 
   const publish = (id: string) => {
-    rows.forEach((r) => update(r.id, { active: r.id === id ? "Oui" : "Non" } as Partial<Meditation>));
+    rows.forEach((r) => update(r.id, (r.id === id ? { active: "Oui", status: "approved" } : { active: "Non" }) as Partial<Meditation>));
     notifySuccess("Méditation mise en avant", "Elle est désormais affichée sur la page d'accueil.");
   };
 
@@ -59,6 +100,8 @@ export function MeditationSection() {
         </div>
       </div>
 
+      <InvitePanel />
+
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {rows.map((m) => (
           <article key={m.id} className={"hover-lift rounded-3xl p-5 shadow-soft " + (m.active === "Oui" ? "green-particles overflow-hidden bg-brand-gradient text-white" : "bg-card")}>
@@ -67,7 +110,7 @@ export function MeditationSection() {
               <div className="font-mono text-sm">{m.verse}</div>
             </div>
             <div className={"mt-2 flex items-center gap-2 text-xs uppercase tracking-widest " + (m.active === "Oui" ? "text-white/70" : "text-muted-foreground")}>
-              <BookOpen className="h-3.5 w-3.5" /> {m.active === "Oui" ? "En ligne" : "Brouillon"}
+              <BookOpen className="h-3.5 w-3.5" /> {m.active === "Oui" ? "En ligne" : m.status === "pending" ? <span className="rounded-full bg-amber-100 px-2 py-0.5 text-amber-700">En attente · pasteur invité</span> : "Brouillon"}
             </div>
             <p className={"mt-3 text-sm leading-relaxed " + (m.active === "Oui" ? "text-white/95" : "text-foreground/80")}>{m.body}</p>
             <div className="mt-4 flex items-center justify-between gap-2">

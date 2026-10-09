@@ -5,7 +5,7 @@ import { useCollection } from "@/lib/collections";
 
 export function CallCards() {
   const { rows } = useCollection<Meditation>(MEDITATION_KEY, meditations);
-  const current = rows.find((m) => m.active === "Oui") ?? rows[0] ?? { ...meditation, id: "m0", active: "Oui" as const };
+  const current = rows.find((m) => m.active === "Oui") ?? rows.find((m) => m.status !== "pending") ?? { ...meditation, id: "m0", active: "Oui" as const };
   return (
     <section className="mx-auto mt-14 w-[min(1200px,95%)]">
       <div className="mb-6 text-center">

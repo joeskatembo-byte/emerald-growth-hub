@@ -119,7 +119,13 @@ export type Meditation = {
   initial: string;
   /** "Oui" = méditation affichée sur la page d'accueil. */
   active: "Oui" | "Non";
+  /** "pending" = envoyée par un pasteur invité, en attente de validation. */
+  status?: "pending" | "approved";
+  guest?: string;
 };
+
+export const INVITES_KEY = "ee.preach-invites.v1";
+export type PreachInvite = { id: string; token: string; guest: string; createdAt: string; used: "Oui" | "Non" };
 
 export const meditations: Meditation[] = [
   { id: "m1", ...meditation, active: "Oui" },
