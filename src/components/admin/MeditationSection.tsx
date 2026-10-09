@@ -1,42 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Plus, Pencil, Trash2, X, Check, RotateCcw, ChevronRight, ChevronLeft, Star, BookOpen, Link2, Copy } from "lucide-react";
 import { useCollection } from "@/lib/collections";
 import { useConfirm } from "@/components/ui/confirm";
-import { INVITES_KEY, MEDITATION_KEY, meditations as seed, type Meditation, type PreachInvite } from "@/data/mock";
+import { MEDITATION_KEY, meditations as seed, type Meditation } from "@/data/mock";
+import { createInvite, listInvites, revokeInvite, pendingGuestMeditations, markImported } from "@/lib/preach.functions";
 
-/** Génère un lien à envoyer à un pasteur invité pour qu'il propose une méditation. */
-function InvitePanel() {
-  const { rows, create, remove } = useCollection<PreachInvite>(INVITES_KEY, []);
+/** Génère un lien (valable 24 h) à envoyer à un pasteur invité. */
+function InvitePanel({ onImport }: { onImport: (m: Omit<Meditation, "id">) => void }) {
+  type Inv = Awaited<ReturnType<typeof listInvites>>[number];
   const { notifySuccess } = useConfirm();
+  const [rows, setRows] = useState<Inv[]>([]);
   const [guest, setGuest] = useState("");
-  const url = (t: string) => (typeof window !== "undefined" ? window.location.origin : "") + "/precher/" + t;
+  const [busy, setBusy] = useState(false);
+  const refresh = async () => {
+    setRows(await listInvites());
+    const pend = await pendingGuestMeditations();
+    if (pend.length) {
+      pend.forEach((p) => onImport({ book: p.book, verse: p.verse, body: p.body, servant: p.servant, initial: p.servant.charAt(0).toUpperCase(), active: "Non", status: "pending", guest: p.servant }));
+      await markImported({ data: { ids: pend.map((p) => p.id) } });
+      notifySuccess("Nouvelle méditation reçue", `${pend.length} parole(s) d'un pasteur invité attend(ent) votre validation.`);
+    }
+  };
+  useEffect(() => { refresh().catch(() => {}); const t = setInterval(() => refresh().catch(() => {}), 30000); return () => clearInterval(t); }, []);
+  const url = (t: string) => window.location.origin + "/precher/" + t;
   const copy = async (t: string) => {
-    try { await navigator.clipboard.writeText(url(t)); } catch { /* ignore */ }
-    notifySuccess("Lien copié", "Envoyez-le au pasteur invité (WhatsApp, SMS, e-mail).");
+    try { await navigator.clipboard.writeText(url(t)); } catch { window.prompt("Copiez ce lien :", url(t)); }
+    notifySuccess("Lien copié", "Envoyez-le au pasteur invité. Il expire dans 24 heures.");
   };
-  const generate = () => {
-    const token = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
-    create({ token, guest: guest.trim(), createdAt: new Date().toISOString().slice(0, 10), used: "Non" });
-    setGuest("");
-    copy(token);
+  const generate = async () => {
+    setBusy(true);
+    try { const inv = await createInvite({ data: { guest: guest.trim() } }); setGuest(""); await copy(inv.token); await refresh(); }
+    finally { setBusy(false); }
   };
+  const state = (i: Inv) => i.used_at ? "parole reçue" : new Date(i.expires_at) < new Date() ? "expiré" : "valide jusqu'au " + new Date(i.expires_at).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
   return (
     <div className="mt-4 rounded-3xl bg-brand-soft/40 p-4">
       <div className="flex items-center gap-2 font-display font-bold"><Link2 className="h-4 w-4 text-brand" /> Inviter un pasteur à prêcher à distance</div>
-      <p className="mt-1 text-xs text-muted-foreground">Sa méditation arrivera ici « En attente » : elle ne sera publique qu'après votre validation (étoile).</p>
+      <p className="mt-1 text-xs text-muted-foreground">Lien valable 24 h, utilisable une seule fois. La parole reçue arrive ici « En attente » et ne devient publique qu'après votre validation (étoile).</p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">
         <input className={field} placeholder="Nom du pasteur invité (ex. Pasteur Daniel)" value={guest} onChange={(e) => setGuest(e.target.value)} />
-        <button disabled={!guest.trim()} onClick={generate} className="tap-motion flex shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Copy className="h-4 w-4" /> Créer et copier le lien</button>
+        <button disabled={guest.trim().length < 2 || busy} onClick={generate} className="tap-motion flex shrink-0 items-center justify-center gap-1.5 rounded-2xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50"><Copy className="h-4 w-4" /> Créer et copier le lien</button>
       </div>
       {rows.length > 0 && (
         <ul className="mt-3 grid gap-2">
           {rows.map((i) => (
             <li key={i.id} className="flex items-center justify-between gap-2 rounded-2xl bg-card px-3 py-2 text-sm">
-              <span className="min-w-0 truncate">{i.guest} <span className="text-xs text-muted-foreground">· {i.used === "Oui" ? "utilisé" : "en attente de réponse"}</span></span>
+              <span className="min-w-0 truncate">{i.guest} <span className="text-xs text-muted-foreground">· {state(i)}</span></span>
               <span className="flex shrink-0 gap-1.5">
-                {i.used === "Non" && <button onClick={() => copy(i.token)} aria-label="Copier le lien" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground hover:text-brand"><Copy className="h-3.5 w-3.5" /></button>}
-                <button onClick={() => remove(i.id)} aria-label="Révoquer" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                {!i.used_at && new Date(i.expires_at) > new Date() && <button onClick={() => copy(i.token)} aria-label="Copier le lien" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-secondary text-muted-foreground hover:text-brand"><Copy className="h-3.5 w-3.5" /></button>}
+                <button onClick={async () => { await revokeInvite({ data: { id: i.id } }); refresh(); }} aria-label="Révoquer" className="tap-motion grid h-8 w-8 place-items-center rounded-xl bg-destructive/10 text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
               </span>
             </li>
           ))}
@@ -100,7 +113,7 @@ export function MeditationSection() {
         </div>
       </div>
 
-      <InvitePanel />
+      <InvitePanel onImport={create} />
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {rows.map((m) => (
