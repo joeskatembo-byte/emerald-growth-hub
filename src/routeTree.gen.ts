@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DonRouteImport } from './routes/don'
 import { Route as InscriptionRouteImport } from './routes/inscription'
 import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as PrecherTokenRouteImport } from './routes/precher.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const ProfilRoute = ProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrecherTokenRoute = PrecherTokenRouteImport.update({
+  id: '/precher/$token',
+  path: '/precher/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/don': typeof DonRoute
   '/inscription': typeof InscriptionRoute
   '/profil': typeof ProfilRoute
+  '/precher/$token': typeof PrecherTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/don': typeof DonRoute
   '/inscription': typeof InscriptionRoute
   '/profil': typeof ProfilRoute
+  '/precher/$token': typeof PrecherTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/don': typeof DonRoute
   '/inscription': typeof InscriptionRoute
   '/profil': typeof ProfilRoute
+  '/precher/$token': typeof PrecherTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/don'
     | '/inscription'
     | '/profil'
+    | '/precher/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/don'
     | '/inscription'
     | '/profil'
+    | '/precher/$token'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/don'
     | '/inscription'
     | '/profil'
+    | '/precher/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   DonRoute: typeof DonRoute
   InscriptionRoute: typeof InscriptionRoute
   ProfilRoute: typeof ProfilRoute
+  PrecherTokenRoute: typeof PrecherTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/precher/$token': {
+      id: '/precher/$token'
+      path: '/precher/$token'
+      fullPath: '/precher/$token'
+      preLoaderRoute: typeof PrecherTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonRoute: DonRoute,
   InscriptionRoute: InscriptionRoute,
   ProfilRoute: ProfilRoute,
+  PrecherTokenRoute: PrecherTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
