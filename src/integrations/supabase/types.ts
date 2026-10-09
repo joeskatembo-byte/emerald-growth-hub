@@ -14,7 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      guest_meditations: {
+        Row: {
+          body: string
+          book: string
+          created_at: string
+          id: string
+          imported: boolean
+          invite_id: string
+          servant: string
+          verse: string
+        }
+        Insert: {
+          body: string
+          book: string
+          created_at?: string
+          id?: string
+          imported?: boolean
+          invite_id: string
+          servant: string
+          verse: string
+        }
+        Update: {
+          body?: string
+          book?: string
+          created_at?: string
+          id?: string
+          imported?: boolean
+          invite_id?: string
+          servant?: string
+          verse?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_meditations_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "preach_invites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      preach_invites: {
+        Row: {
+          created_at: string
+          expires_at: string
+          guest: string
+          id: string
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          guest: string
+          id?: string
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          guest?: string
+          id?: string
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
